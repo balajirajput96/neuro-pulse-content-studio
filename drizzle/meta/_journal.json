@@ -15,6 +15,13 @@
       "when": 1786586748615,
       "tag": "0001_crazy_iron_fist",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1786590251585,
+      "tag": "0002_tiny_sasquatch",
+      "breakpoints": true
     }
   ]
 }

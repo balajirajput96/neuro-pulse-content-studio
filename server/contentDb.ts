@@ -1,6 +1,8 @@
 import { and, desc, eq, inArray } from "drizzle-orm";
 import {
   blockerNotices,
+  automationJobs,
+  automationRuns,
   citationRecords,
   contentLog,
   reelDrafts,
@@ -30,7 +32,10 @@ export async function getWorkspaceData(ownerId: number) {
     bundleIds.length ? db.select().from(weeklyBundleReels).where(inArray(weeklyBundleReels.bundleId, bundleIds)) : [],
   ]);
 
-  return { studies, drafts, citations, bundles, bundleLinks, blockers, usedTopics };
+  const jobs = await db.select().from(automationJobs).where(eq(automationJobs.ownerId, ownerId)).orderBy(automationJobs.jobType);
+  const jobIds = jobs.map(job => job.id);
+  const runs = jobIds.length ? await db.select().from(automationRuns).where(inArray(automationRuns.jobId, jobIds)).orderBy(desc(automationRuns.startedAt)).limit(8) : [];
+  return { studies, drafts, citations, bundles, bundleLinks, blockers, usedTopics, jobs, runs };
 }
 
 export async function findLoggedTopic(ownerId: number, topicKey: string) {

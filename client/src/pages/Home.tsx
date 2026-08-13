@@ -99,9 +99,35 @@ export default function Home() {
     },
     onError: error => toast.error("Working draft could not be initialized", { description: error.message }),
   });
+  const automation = trpc.automation.get.useQuery();
+  const configureSchedules = trpc.automation.configureFreeSchedules.useMutation({
+    onSuccess: result => {
+      toast("Free schedules configured", { description: `${result.configured.length} recurring workflow${result.configured.length === 1 ? "" : "s"} are now registered. External publishing remains manual.` });
+      automation.refetch();
+      utils.workspace.get.invalidate();
+    },
+    onError: error => toast.error("Schedules could not be configured", { description: error.message }),
+  });
+  const runAutomation = trpc.automation.runNow.useMutation({
+    onSuccess: result => {
+      toast("Workflow run recorded", { description: result.summary });
+      automation.refetch();
+      utils.workspace.get.invalidate();
+    },
+    onError: error => toast.error("Workflow run could not start", { description: error.message }),
+  });
 
-  const workspace = data ?? { studies: [], drafts: [], citations: [], bundles: [], bundleLinks: [], blockers: [], usedTopics: [] };
+  const workspace = data ?? { studies: [], drafts: [], citations: [], bundles: [], bundleLinks: [], blockers: [], usedTopics: [], jobs: [], runs: [] };
   const activeBlockers = workspace.blockers.length ? workspace.blockers.map(b => ({ ...b, id: String(b.id), icon: ShieldAlert })) : derivedBlockers;
+  const automationJobs: Array<{
+    id: number | string;
+    jobType: "daily_research" | "weekly_compilation";
+    cronExpression: string;
+    lastStatus: string;
+    lastSummary: string | null;
+    scheduleCronTaskUid: string | null;
+  }> = automation.data?.jobs ?? workspace.jobs;
+  const automationRuns = automation.data?.runs ?? workspace.runs ?? [];
   const readyDrafts = workspace.drafts.filter(d => d.sourceCited && d.limitationLinePresent && d.notMedicalAdvice && d.bgmStatus === "ready" && d.voiceStatus === "ready");
   const publishedCount = workspace.drafts.filter(d => d.approvedForPublish).length;
   const draftToApprove = workspace.drafts.find(d => d.id === approvalDraftId);
@@ -141,6 +167,29 @@ export default function Home() {
               <p className="mt-1 text-sm leading-6 text-[#58723f]">An approval only records the owner’s decision after every readiness check passes. It does not upload to YouTube, Instagram, or Facebook.</p>
             </div>
           </div>
+        </section>
+
+        <section className="mb-8 rounded-2xl border border-[#cbd9e9] bg-[#f3f8fc] p-4 sm:p-5" aria-label="Free workflow schedule">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+            <div className="flex gap-3">
+              <Clock3 className="mt-0.5 h-5 w-5 shrink-0 text-[#315e88]" />
+              <div>
+                <p className="text-sm font-semibold text-[#294c70]">Free periodic workflow</p>
+                <p className="mt-1 max-w-2xl text-sm leading-6 text-[#59718a]">Daily PubMed intake runs at 09:00 IST and weekly compilation readiness runs each Sunday at 10:00 IST. Both only update this private workspace; they never generate media, bypass blockers, or publish externally.</p>
+              </div>
+            </div>
+            <Button onClick={() => configureSchedules.mutate()} disabled={configureSchedules.isPending} className="shrink-0 rounded-xl bg-[#315e88] hover:bg-[#294c70]">{configureSchedules.isPending ? "Configuring…" : "Enable free schedules"}</Button>
+          </div>
+          <div className="mt-5 grid gap-3 lg:grid-cols-2">
+            {(automationJobs.length ? automationJobs : [
+              { id: "daily", jobType: "daily_research", cronExpression: "0 30 3 * * *", lastStatus: "idle", lastSummary: "Not configured yet.", scheduleCronTaskUid: null },
+              { id: "weekly", jobType: "weekly_compilation", cronExpression: "0 30 4 * * 0", lastStatus: "idle", lastSummary: "Not configured yet.", scheduleCronTaskUid: null },
+            ]).map(job => {
+              const isDaily = job.jobType === "daily_research";
+              return <article key={String(job.id)} className="rounded-xl border border-[#d5e2ed] bg-white/80 p-4"><div className="flex items-start justify-between gap-3"><div><p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#698097]">{isDaily ? "Daily evidence intake" : "Weekly compilation prep"}</p><p className="mt-1 text-sm font-semibold text-[#31495f]">{isDaily ? "PubMed candidates → review queue" : "Seven-reel readiness → bundle status"}</p></div><StatusPill value={job.lastStatus} /></div><p className="mt-3 font-mono text-[11px] text-[#71879a]">UTC cron: {job.cronExpression}</p><p className="mt-2 min-h-10 text-xs leading-5 text-[#667b8d]">{job.lastSummary || "No run has been recorded yet."}</p><div className="mt-3 flex items-center justify-between gap-3"><span className={`text-[10px] font-semibold uppercase tracking-[0.12em] ${job.scheduleCronTaskUid ? "text-[#3e7b4a]" : "text-[#9b6a19]"}`}>{job.scheduleCronTaskUid ? "Scheduled" : "Awaiting activation"}</span><Button variant="outline" size="sm" onClick={() => runAutomation.mutate({ jobType: job.jobType as "daily_research" | "weekly_compilation" })} disabled={runAutomation.isPending || !job.scheduleCronTaskUid} className="h-8 rounded-lg border-[#bfd0df] bg-white text-[#315e88] hover:bg-[#eaf3fa]">Run now</Button></div></article>;
+            })}
+          </div>
+          {automationRuns[0] && <p className="mt-3 text-xs text-[#6f8394]">Last recorded run: {automationRuns[0].resultSummary}</p>}
         </section>
 
         <section className="mb-12" aria-label="Active blockers">

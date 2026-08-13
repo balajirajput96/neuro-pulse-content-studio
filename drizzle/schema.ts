@@ -49,6 +49,7 @@ export const studyCandidates = mysqlTable("study_candidates", {
     "Replication study",
     "Clinical trial",
     "Preclinical model",
+    "Unclassified",
   ]).notNull(),
   screeningStatus: mysqlEnum("screeningStatus", ["passed", "needs_review", "rejected"])
     .default("needs_review")
@@ -143,8 +144,41 @@ export const blockerNotices = mysqlTable("blocker_notices", {
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 
+export const automationJobs = mysqlTable(
+  "automation_jobs",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    ownerId: int("ownerId").notNull(),
+    jobType: mysqlEnum("jobType", ["daily_research", "weekly_compilation"]).notNull(),
+    cronExpression: varchar("cronExpression", { length: 64 }).notNull(),
+    scheduleCronTaskUid: varchar("scheduleCronTaskUid", { length: 65 }),
+    enabled: boolean("enabled").default(true).notNull(),
+    lastExecutedAt: timestamp("lastExecutedAt"),
+    lastStatus: mysqlEnum("lastStatus", ["idle", "running", "succeeded", "failed", "blocked"])
+      .default("idle")
+      .notNull(),
+    lastSummary: text("lastSummary"),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  table => [uniqueIndex("automation_jobs_owner_type").on(table.ownerId, table.jobType)],
+);
+
+export const automationRuns = mysqlTable("automation_runs", {
+  id: int("id").autoincrement().primaryKey(),
+  jobId: int("jobId").notNull(),
+  triggerType: mysqlEnum("triggerType", ["scheduled", "manual"]).notNull(),
+  status: mysqlEnum("status", ["running", "succeeded", "failed", "blocked"]).notNull(),
+  startedAt: timestamp("startedAt").defaultNow().notNull(),
+  completedAt: timestamp("completedAt"),
+  resultSummary: text("resultSummary"),
+  candidateCount: int("candidateCount").default(0).notNull(),
+});
+
 export type StudyCandidate = typeof studyCandidates.$inferSelect;
 export type ReelDraft = typeof reelDrafts.$inferSelect;
 export type CitationRecord = typeof citationRecords.$inferSelect;
 export type WeeklyBundle = typeof weeklyBundles.$inferSelect;
 export type BlockerNotice = typeof blockerNotices.$inferSelect;
+export type AutomationJob = typeof automationJobs.$inferSelect;
+export type AutomationRun = typeof automationRuns.$inferSelect;

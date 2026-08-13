@@ -8,6 +8,9 @@ import { approveDraftForOwner, findLoggedTopic, getWorkspaceData, initializeCurr
 import { getDb } from "./db";
 import { studyCandidates } from "../drizzle/schema";
 import { isWorkspaceOwnerRole, normalizeTopic } from "../shared/contentModels";
+import { attachScheduleTaskUid, AUTOMATION_CRONS, ensureAutomationJobs, getAutomationState, runAutomationJobByOwner, type AutomationJobType } from "./automation";
+import { createHeartbeatJob } from "./_core/heartbeat";
+import { parse as parseCookie } from "cookie";
 
 const ownerProcedure = protectedProcedure.use(({ ctx, next }) => {
   if (!isWorkspaceOwnerRole(ctx.user.role)) {
@@ -40,6 +43,8 @@ export const appRouter = router({
         bundleLinks: [],
         blockers: [],
         usedTopics: [],
+        jobs: [],
+        runs: [],
       };
     }),
     addStudyCandidate: ownerProcedure
@@ -79,6 +84,35 @@ export const appRouter = router({
       .input(z.object({ reelDraftId: z.number().int().positive() }))
       .mutation(async ({ ctx, input }) => approveDraftForOwner(ctx.user.id, input.reelDraftId)),
     initializeCurrentDraft: ownerProcedure.mutation(async ({ ctx }) => initializeCurrentWorkingDraft(ctx.user.id)),
+  }),
+  automation: router({
+    get: ownerProcedure.query(async ({ ctx }) => getAutomationState(ctx.user.id)),
+    configureFreeSchedules: ownerProcedure.mutation(async ({ ctx }) => {
+      const jobs = await ensureAutomationJobs(ctx.user.id);
+      const sessionToken = parseCookie(ctx.req.headers.cookie ?? "")[COOKIE_NAME] ?? "";
+      const configured = [];
+      for (const job of jobs) {
+        if (job.scheduleCronTaskUid) {
+          configured.push({ jobType: job.jobType, taskUid: job.scheduleCronTaskUid, existing: true });
+          continue;
+        }
+        const jobType = job.jobType as AutomationJobType;
+        const created = await createHeartbeatJob({
+          name: `neuropulse-${jobType}-${ctx.user.id}`,
+          cron: AUTOMATION_CRONS[jobType],
+          path: jobType === "daily_research" ? "/api/scheduled/daily-research" : "/api/scheduled/weekly-compilation",
+          description: jobType === "daily_research"
+            ? "Daily PubMed neuroscience intake. Imports candidates for editorial review only; never publishes externally."
+            : "Weekly compilation readiness check. Prepares status only; never compiles or publishes externally.",
+        }, sessionToken);
+        await attachScheduleTaskUid(ctx.user.id, jobType, created.taskUid);
+        configured.push({ jobType, taskUid: created.taskUid, existing: false, nextExecutionAt: created.nextExecutionAt });
+      }
+      return { configured };
+    }),
+    runNow: ownerProcedure
+      .input(z.object({ jobType: z.enum(["daily_research", "weekly_compilation"]) }))
+      .mutation(async ({ ctx, input }) => runAutomationJobByOwner(ctx.user.id, input.jobType, "manual")),
   }),
 });
 
