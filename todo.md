@@ -1,0 +1,21 @@
+# Project TODO
+
+- [x] Define data models for evidence-screened studies, draft reels, citations, weekly bundles, blockers, and owner-only publication approvals.
+- [x] Create database schema and migration for content operations records and duplicate-topic tracking.
+- [x] Add protected server procedures for dashboard data, duplicate detection, readiness calculation, and owner-only manual approval.
+- [x] Build sidebar dashboard navigation for Daily Research, Draft Reels, Weekly Compilations, Publishing Status, and Content Log.
+- [x] Build the Daily Research brief board with source metadata and pass/fail screening status.
+- [x] Add a deliberate owner-only action to initialize the current source-backed working draft and its known blockers.
+- [x] Build the Draft Reel queue with scripts, keyframe thumbnails, BGM and voice status, plus all three readiness flags.
+- [x] Build the Weekly Compilation tracker with seven-reel grouping and readiness calculation.
+- [x] Build the Content Log with duplicate-topic alerts and citation records.
+- [x] Build prominent blocker notices for voice sample, video quota, and Facebook Page access.
+- [x] Enforce a deliberate owner-only manual publishing approval action with no auto-publish behavior.
+- [x] Add responsive premium visual design, loading states, empty states, and accessible interactions.
+- [x] Scope citation and weekly-bundle data queries to the authenticated owner.
+- [x] Write Vitest coverage for readiness, duplicate-topic, and manual approval rules.
+- [ ] Verify server, database, desktop and mobile dashboard behavior.
+- [ ] Save a verified project checkpoint and deliver the completed dashboard.
+- [x] Verify authenticated sidebar navigation renders and scrolls to every section.
+- [x] Fix the configured owner identity check so the signed-in workspace owner can initialize and approve drafts while non-owners remain blocked.
+- [ ] Verify the authenticated mobile dashboard across draft initialization, blocker notices, readiness state, and sidebar navigation.
