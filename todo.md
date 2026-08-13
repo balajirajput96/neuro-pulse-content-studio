@@ -21,8 +21,8 @@
 - [x] Verify the authenticated mobile dashboard across draft initialization, blocker notices, readiness state, and sidebar navigation.
 - [x] Choose the operating model for recurring neuroscience research and draft preparation (free periodic workflow selected).
 - [x] Add durable schedule configuration and run-history records without creating any auto-publish route.
-- [ ] Configure daily evidence research and weekly compilation-preparation jobs under the approved operating model.
-- [ ] Run and record the first permitted research workflow execution.
-- [ ] Verify scheduled jobs keep all external publishing actions manual and owner-gated.
+- [x] Configure daily evidence research and weekly compilation-preparation jobs under the approved operating model.
+- [x] Run and record the first permitted research workflow execution.
+- [x] Verify scheduled jobs keep all external publishing actions manual and owner-gated.
 - [x] Obtain acknowledgement of usage-based always-on hosting cost before enabling continuous processing (not applicable: free periodic workflow selected).
 - [x] Configure the continuous worker only after its cost and manual-publishing boundary are confirmed (not enabled: free periodic workflow selected).
