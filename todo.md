@@ -35,3 +35,6 @@
 - [x] Open the Gemini web application with the existing connected Google account and complete the available account setup.
 - [x] Verify the actual available Google account integration scope and discard any unconfirmed connector-only change.
 - [x] Document the direct Gemini professional setup, enabled schedule, manual-publishing boundary, and remaining owner actions.
+- [x] Inspect the connected Gemini Spark workspace and existing NeuroPulse-related workflows.
+- [x] Organize the approved daily research, reel-draft, and weekly review workflow in Gemini Spark without enabling auto-publish.
+- [x] Verify Gemini Spark workflow status and document the manual public-post boundary.
