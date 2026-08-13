@@ -38,21 +38,22 @@
 - [x] Inspect the connected Gemini Spark workspace and existing NeuroPulse-related workflows.
 - [x] Organize the approved daily research, reel-draft, and weekly review workflow in Gemini Spark without enabling auto-publish.
 - [x] Verify Gemini Spark workflow status and document the manual public-post boundary.
-- [ ] Inspect Gemini Spark Connected Apps for available Google Cloud and Meta integrations.
-- [ ] Connect supported authorized services without storing fabricated or extracted credentials.
-- [ ] Verify resulting connected-app status and retain manual approval for all external publishing.
-- [ ] Inspect the existing authenticated Meta developer account and app availability.
+- [x] Inspect Gemini Spark Connected Apps for available Google Cloud and Meta integrations.
+- [ ] Connect a newly supported authorized service without storing fabricated or extracted credentials (blocked: no native Meta app and no valid Meta MCP endpoint available).
+- [x] Verify resulting connected-app status and retain manual approval for all external publishing.
+- [x] Inspect the existing authenticated Meta developer account and app availability.
 - [ ] Create a minimal Meta Developer App configuration for future manual integrations without enabling auto-publish.
-- [ ] Verify the Meta app setup and document any Page, permission, or review requirements.
-- [ ] Reassess official Facebook account settings and recovery methods for Meta developer verification.
-- [ ] Document the verified Meta recovery options and any remaining account-security requirement.
+- [x] Verify the Meta app setup and document any Page, permission, or review requirements.
+- [x] Reassess official Facebook account settings and recovery methods for Meta developer verification.
+- [x] Document the verified Meta recovery options and any remaining account-security requirement.
 - [x] Inspect the connected Google account's AI Studio, Drive, Cloud, and Gemini Spark setup state.
 - [x] Configure available no-cost Google service integrations and prepare credential requirements.
 - [x] Obtain confirmation before creating a billable API key or applying irreversible Google Cloud settings.
-- [ ] Verify configured Google services and record any remaining setup requirements.
+- [x] Verify configured Google services and record any remaining setup requirements.
 - [ ] Resolve Google AI Studio anti-abuse block through a user-assisted API-key creation step.
 - [x] Inspect current Google Cloud IAM role and determine whether the connected account can manage Gemini API credentials.
 - [x] Apply only an authorized least-privilege IAM change or document required project-owner action.
 - [x] Create the approved private Google Drive editorial folder structure under Neuroscience Reels Content.
 - [x] Maintain the approved private research and draft-preparation schedules without enabling automatic public submissions.
 - [x] Document the current Google service access blockers and required owner-only actions.
+- [x] Reconcile previous Connected Apps and Meta verification findings into the current integration status record.
