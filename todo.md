@@ -26,3 +26,12 @@
 - [x] Verify scheduled jobs keep all external publishing actions manual and owner-gated.
 - [x] Obtain acknowledgement of usage-based always-on hosting cost before enabling continuous processing (not applicable: free periodic workflow selected).
 - [x] Configure the continuous worker only after its cost and manual-publishing boundary are confirmed (not enabled: free periodic workflow selected).
+- [x] Run a fresh owner-authorized PubMed research intake and record its results.
+- [x] Reconfirm that public YouTube, Instagram, and Facebook submissions require a separate confirmation at submission time.
+- [x] Inspect the connected Google Cloud integration, permissions, and services relevant to NeuroPulse.
+- [x] Configure approved professional Google Cloud integration settings without enabling automated public publishing.
+- [x] Verify the resulting integration status and document any required owner actions.
+- [x] Connect Google Gemini through the existing authorized Google account without extracting or hardcoding an API key.
+- [x] Open the Gemini web application with the existing connected Google account and complete the available account setup.
+- [x] Verify the actual available Google account integration scope and discard any unconfirmed connector-only change.
+- [x] Document the direct Gemini professional setup, enabled schedule, manual-publishing boundary, and remaining owner actions.
