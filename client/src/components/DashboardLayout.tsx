@@ -1,5 +1,6 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { startLogin } from "@/const";
+import { scrollToDashboardSection } from "@/lib/dashboardNavigation";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -47,7 +48,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   const selectSection = (id: string) => {
     setActive(id);
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    scrollToDashboardSection(id);
   };
 
   return (

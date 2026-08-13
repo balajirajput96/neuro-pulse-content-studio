@@ -14,8 +14,8 @@
 - [x] Add responsive premium visual design, loading states, empty states, and accessible interactions.
 - [x] Scope citation and weekly-bundle data queries to the authenticated owner.
 - [x] Write Vitest coverage for readiness, duplicate-topic, and manual approval rules.
-- [ ] Verify server, database, desktop and mobile dashboard behavior.
+- [x] Verify server, database, desktop and mobile dashboard behavior.
 - [ ] Save a verified project checkpoint and deliver the completed dashboard.
 - [x] Verify authenticated sidebar navigation renders and scrolls to every section.
 - [x] Fix the configured owner identity check so the signed-in workspace owner can initialize and approve drafts while non-owners remain blocked.
-- [ ] Verify the authenticated mobile dashboard across draft initialization, blocker notices, readiness state, and sidebar navigation.
+- [x] Verify the authenticated mobile dashboard across draft initialization, blocker notices, readiness state, and sidebar navigation.
