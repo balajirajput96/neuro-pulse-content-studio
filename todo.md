@@ -39,10 +39,10 @@
 - [x] Organize the approved daily research, reel-draft, and weekly review workflow in Gemini Spark without enabling auto-publish.
 - [x] Verify Gemini Spark workflow status and document the manual public-post boundary.
 - [x] Inspect Gemini Spark Connected Apps for available Google Cloud and Meta integrations.
-- [ ] Connect a newly supported authorized service without storing fabricated or extracted credentials (blocked: no native Meta app and no valid Meta MCP endpoint available).
+- [ ] Connect a newly supported authorized service without storing fabricated or extracted credentials (blocked externally: no native Meta app, no valid Meta MCP endpoint, and no owner-authorized replacement connector).
 - [x] Verify resulting connected-app status and retain manual approval for all external publishing.
 - [x] Inspect the existing authenticated Meta developer account and app availability.
-- [ ] Create a minimal Meta Developer App configuration for future manual integrations without enabling auto-publish.
+- [ ] Create a minimal Meta Developer App configuration for future manual integrations without enabling auto-publish (blocked externally: Meta two-step verification must be recovered by the owner before app creation can proceed).
 - [x] Verify the Meta app setup and document any Page, permission, or review requirements.
 - [x] Reassess official Facebook account settings and recovery methods for Meta developer verification.
 - [x] Document the verified Meta recovery options and any remaining account-security requirement.
@@ -50,10 +50,13 @@
 - [x] Configure available no-cost Google service integrations and prepare credential requirements.
 - [x] Obtain confirmation before creating a billable API key or applying irreversible Google Cloud settings.
 - [x] Verify configured Google services and record any remaining setup requirements.
-- [ ] Resolve Google AI Studio anti-abuse block through a user-assisted API-key creation step.
+- [ ] Resolve Google AI Studio anti-abuse block through a user-assisted API-key creation step (blocked externally: Google must clear the restriction and a project owner must grant the required IAM role or create a restricted key).
 - [x] Inspect current Google Cloud IAM role and determine whether the connected account can manage Gemini API credentials.
 - [x] Apply only an authorized least-privilege IAM change or document required project-owner action.
 - [x] Create the approved private Google Drive editorial folder structure under Neuroscience Reels Content.
 - [x] Maintain the approved private research and draft-preparation schedules without enabling automatic public submissions.
 - [x] Document the current Google service access blockers and required owner-only actions.
 - [x] Reconcile previous Connected Apps and Meta verification findings into the current integration status record.
+- [x] Activate the owner dashboard's approved free daily and weekly private schedules, then verify their configured state.
+- [x] Create a detailed safe technical runbook of implemented code, command categories, schedules, integrations, and remaining blockers.
+- [x] Add an automation extension guide that preserves manual owner confirmation for all external publishing.
