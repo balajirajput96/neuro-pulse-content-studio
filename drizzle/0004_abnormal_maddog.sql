@@ -1,0 +1,1 @@
+-- No-op compatibility entry: the nullable editorialFlags column is created in migration 0003.

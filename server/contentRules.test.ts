@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { approvalBlocker, isDraftReady, isWeeklyBundleReady, isWorkspaceOwnerRole, normalizeTopic } from "../shared/contentModels";
+import { approvalBlocker, buildEditorialFlags, isDraftReady, isHighScrutinyCategory, isWeeklyBundleReady, isWorkspaceOwnerRole, normalizeTopic } from "../shared/contentModels";
 
 describe("content workflow rules", () => {
   it("normalizes topic punctuation before duplicate matching", () => {
@@ -48,6 +48,27 @@ describe("content workflow rules", () => {
         "ready",
         "ready",
       ),
-    ).toBe("This draft cannot be approved until all readiness requirements are complete");
+    ).toBe("This draft cannot be approved until source-pack, health-safety, and production readiness requirements are complete");
+  });
+
+  it("blocks approval when the private source pack is incomplete or health red flags remain uncleared", () => {
+    const checklist = { sourceCited: true, limitationLinePresent: true, notMedicalAdvice: true };
+    expect(isDraftReady(checklist, "ready", "ready", "missing", true)).toBe(false);
+    expect(isDraftReady(checklist, "ready", "ready", "complete", false)).toBe(false);
+    expect(isDraftReady(checklist, "ready", "ready", "complete", true)).toBe(true);
+    expect(approvalBlocker(checklist, "ready", "ready", "needs_review", true)).toContain("source-pack");
+  });
+
+  it("keeps Diet and Mental Health in high-scrutiny review while primary research categories remain standard", () => {
+    expect(isHighScrutinyCategory("diet")).toBe(true);
+    expect(isHighScrutinyCategory("mental_health")).toBe(true);
+    expect(isHighScrutinyCategory("neuroscience")).toBe(false);
+    expect(isHighScrutinyCategory("psychology")).toBe(false);
+  });
+
+  it("flags missing evidence context for high-scrutiny candidates", () => {
+    expect(buildEditorialFlags("diet", "https://pubmed.ncbi.nlm.nih.gov/123456/", undefined)).toContain("missing_limitation");
+    expect(buildEditorialFlags("mental_health", undefined, "Adult cohort with a stated observational limitation")).toContain("missing_source_citation");
+    expect(buildEditorialFlags("neuroscience", "https://pubmed.ncbi.nlm.nih.gov/123456/", undefined)).toEqual([]);
   });
 });

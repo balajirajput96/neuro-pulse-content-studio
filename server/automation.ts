@@ -8,7 +8,8 @@ import {
   weeklyBundleReels,
   weeklyBundles,
 } from "../drizzle/schema";
-import { normalizeTopic } from "../shared/contentModels";
+import { buildEditorialFlags, normalizeTopic } from "../shared/contentModels";
+import { updateHeartbeatJob } from "./_core/heartbeat";
 import { getDb } from "./db";
 
 export const AUTOMATION_CRONS = {
@@ -18,6 +19,12 @@ export const AUTOMATION_CRONS = {
 
 export type AutomationJobType = keyof typeof AUTOMATION_CRONS;
 export type AutomationTrigger = "scheduled" | "manual";
+
+export function inferEditorialCategory(title: string): "neuroscience" | "psychology" {
+  return /\b(psychology|psychological|behavioral|behavioural|cognitive|emotion|wellbeing)\b/i.test(title)
+    ? "psychology"
+    : "neuroscience";
+}
 
 type PubMedRecord = {
   uid: string;
@@ -38,7 +45,7 @@ function weekStartUtc(date = new Date()) {
 async function fetchRecentPubMedRecords(): Promise<PubMedRecord[]> {
   const search = new URL("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi");
   search.searchParams.set("db", "pubmed");
-  search.searchParams.set("term", "neuroscience[Title/Abstract]");
+  search.searchParams.set("term", "(neuroscience[Title/Abstract] OR psychology[Title/Abstract])");
   search.searchParams.set("sort", "pub date");
   search.searchParams.set("datetype", "pdat");
   search.searchParams.set("reldate", "7");
@@ -70,7 +77,7 @@ export async function ensureAutomationJobs(ownerId: number) {
       jobType,
       cronExpression: AUTOMATION_CRONS[jobType],
     }).onDuplicateKeyUpdate({
-      set: { cronExpression: AUTOMATION_CRONS[jobType], enabled: true },
+      set: { cronExpression: AUTOMATION_CRONS[jobType] },
     });
   }
   return db.select().from(automationJobs).where(eq(automationJobs.ownerId, ownerId)).orderBy(automationJobs.jobType);
@@ -84,10 +91,37 @@ export async function attachScheduleTaskUid(ownerId: number, jobType: Automation
     .where(and(eq(automationJobs.ownerId, ownerId), eq(automationJobs.jobType, jobType)));
 }
 
+export async function setAutomationJobEnabled(ownerId: number, jobType: AutomationJobType, enabled: boolean, userSession: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database is unavailable");
+  const job = (await db.select().from(automationJobs)
+    .where(and(eq(automationJobs.ownerId, ownerId), eq(automationJobs.jobType, jobType)))
+    .limit(1))[0];
+  if (!job) throw new Error("Automation job not found");
+  if (!job.scheduleCronTaskUid) throw new Error("This private schedule has not been configured yet");
+  await updateHeartbeatJob(job.scheduleCronTaskUid, { enable: enabled }, userSession);
+  await db.update(automationJobs)
+    .set({
+      enabled,
+      lastStatus: enabled ? "idle" : "blocked",
+      lastSummary: enabled
+        ? "Private schedule resumed; awaiting its next run."
+        : "Private schedule paused by the workspace owner.",
+    })
+    .where(eq(automationJobs.id, job.id));
+  return { enabled };
+}
+
 async function runDailyResearch(job: typeof automationJobs.$inferSelect, triggerType: AutomationTrigger) {
   const db = await getDb();
   if (!db) throw new Error("Database is unavailable");
-  const runResult = await db.insert(automationRuns).values({ jobId: job.id, triggerType, status: "running" });
+  const runResult = await db.insert(automationRuns).values({
+    jobId: job.id,
+    triggerType,
+    status: "running",
+    sourceSystem: "neuropulse_heartbeat",
+    nextOwnerAction: "Review new candidates in the private research queue.",
+  });
   const runId = Number(runResult[0].insertId);
   try {
     const records = await fetchRecentPubMedRecords();
@@ -101,17 +135,21 @@ async function runDailyResearch(job: typeof automationJobs.$inferSelect, trigger
         .limit(1);
       if (duplicateCandidate[0]) continue;
       const topicKey = normalizeTopic(title);
+      const contentCategory = inferEditorialCategory(title);
       const priorLog = await db.select({ id: contentLog.id })
         .from(contentLog)
         .where(and(eq(contentLog.ownerId, job.ownerId), eq(contentLog.topicKey, topicKey)))
         .limit(1);
       const doi = record.articleids?.find(identifier => identifier.idtype === "doi")?.value;
       const year = Number(record.pubdate?.match(/(?:19|20)\d{2}/)?.[0] ?? "") || undefined;
+      const sourceUrl = `https://pubmed.ncbi.nlm.nih.gov/${record.uid}/`;
       await db.insert(studyCandidates).values({
         ownerId: job.ownerId,
         title,
         topicKey,
+        contentCategory,
         journal: record.fulljournalname || record.source || "PubMed",
+        sourceUrl,
         doi,
         pmid: record.uid,
         studyType: "Unclassified",
@@ -120,18 +158,35 @@ async function runDailyResearch(job: typeof automationJobs.$inferSelect, trigger
         screeningReason: priorLog[0]
           ? "Possible topic repeat: matched against the approved content log. Editorial review required."
           : "Automated PubMed intake: source identified, but study design and limitations require editorial review.",
+        reviewRisk: "standard",
+        crossValidationStatus: "needs_review",
+        requiresOwnerReview: true,
+        editorialFlags: buildEditorialFlags(contentCategory, sourceUrl),
         indexedAt: new Date(),
         isDuplicate: Boolean(priorLog[0]),
       });
       inserted += 1;
     }
     const summary = `PubMed intake checked ${records.length} recent records and added ${inserted} new candidate${inserted === 1 ? "" : "s"} for editorial review.`;
-    await db.update(automationRuns).set({ status: "succeeded", completedAt: new Date(), resultSummary: summary, candidateCount: inserted }).where(eq(automationRuns.id, runId));
+    await db.update(automationRuns).set({
+      status: "succeeded",
+      completedAt: new Date(),
+      resultSummary: summary,
+      candidateCount: inserted,
+      nextOwnerAction: inserted
+        ? "Screen each candidate before source-pack or script creation."
+        : "No action is required; duplicates were excluded.",
+    }).where(eq(automationRuns.id, runId));
     await db.update(automationJobs).set({ lastExecutedAt: new Date(), lastStatus: "succeeded", lastSummary: summary }).where(eq(automationJobs.id, job.id));
     return { status: "succeeded" as const, summary, candidateCount: inserted };
   } catch (error) {
     const summary = `Daily research intake failed: ${error instanceof Error ? error.message : String(error)}`;
-    await db.update(automationRuns).set({ status: "failed", completedAt: new Date(), resultSummary: summary }).where(eq(automationRuns.id, runId));
+    await db.update(automationRuns).set({
+      status: "failed",
+      completedAt: new Date(),
+      resultSummary: summary,
+      nextOwnerAction: "Inspect the private run summary and retry only after the source issue is understood.",
+    }).where(eq(automationRuns.id, runId));
     await db.update(automationJobs).set({ lastExecutedAt: new Date(), lastStatus: "failed", lastSummary: summary }).where(eq(automationJobs.id, job.id));
     throw new Error(summary);
   }
@@ -140,7 +195,13 @@ async function runDailyResearch(job: typeof automationJobs.$inferSelect, trigger
 async function runWeeklyCompilation(job: typeof automationJobs.$inferSelect, triggerType: AutomationTrigger) {
   const db = await getDb();
   if (!db) throw new Error("Database is unavailable");
-  const runResult = await db.insert(automationRuns).values({ jobId: job.id, triggerType, status: "running" });
+  const runResult = await db.insert(automationRuns).values({
+    jobId: job.id,
+    triggerType,
+    status: "running",
+    sourceSystem: "neuropulse_heartbeat",
+    nextOwnerAction: "Review bundle readiness in the private dashboard.",
+  });
   const runId = Number(runResult[0].insertId);
   try {
     const currentWeek = weekStartUtc();
@@ -149,7 +210,12 @@ async function runWeeklyCompilation(job: typeof automationJobs.$inferSelect, tri
       .limit(1))[0];
     if (!bundle) {
       const summary = "Weekly compilation prep is waiting for a seven-reel bundle; no compilation or publication was created.";
-      await db.update(automationRuns).set({ status: "blocked", completedAt: new Date(), resultSummary: summary }).where(eq(automationRuns.id, runId));
+      await db.update(automationRuns).set({
+        status: "blocked",
+        completedAt: new Date(),
+        resultSummary: summary,
+        nextOwnerAction: "Link and complete seven private reel drafts before requesting compilation review.",
+      }).where(eq(automationRuns.id, runId));
       await db.update(automationJobs).set({ lastExecutedAt: new Date(), lastStatus: "blocked", lastSummary: summary }).where(eq(automationJobs.id, job.id));
       return { status: "blocked" as const, summary, candidateCount: 0 };
     }
@@ -162,12 +228,24 @@ async function runWeeklyCompilation(job: typeof automationJobs.$inferSelect, tri
     const summary = isReady
       ? "Seven source-complete reels are ready for owner-directed compilation; no external publication was created."
       : `Weekly compilation prep found ${ready} of ${links.length || 7} linked reels ready; no compilation or publication was created.`;
-    await db.update(automationRuns).set({ status: isReady ? "succeeded" : "blocked", completedAt: new Date(), resultSummary: summary }).where(eq(automationRuns.id, runId));
+    await db.update(automationRuns).set({
+      status: isReady ? "succeeded" : "blocked",
+      completedAt: new Date(),
+      resultSummary: summary,
+      nextOwnerAction: isReady
+        ? "Owner may review the private compilation package; no public action is scheduled."
+        : "Complete missing source, disclosure, voice, or visual requirements.",
+    }).where(eq(automationRuns.id, runId));
     await db.update(automationJobs).set({ lastExecutedAt: new Date(), lastStatus: isReady ? "succeeded" : "blocked", lastSummary: summary }).where(eq(automationJobs.id, job.id));
     return { status: isReady ? "succeeded" as const : "blocked" as const, summary, candidateCount: 0 };
   } catch (error) {
     const summary = `Weekly compilation preparation failed: ${error instanceof Error ? error.message : String(error)}`;
-    await db.update(automationRuns).set({ status: "failed", completedAt: new Date(), resultSummary: summary }).where(eq(automationRuns.id, runId));
+    await db.update(automationRuns).set({
+      status: "failed",
+      completedAt: new Date(),
+      resultSummary: summary,
+      nextOwnerAction: "Inspect the private run summary before retrying.",
+    }).where(eq(automationRuns.id, runId));
     await db.update(automationJobs).set({ lastExecutedAt: new Date(), lastStatus: "failed", lastSummary: summary }).where(eq(automationJobs.id, job.id));
     throw new Error(summary);
   }

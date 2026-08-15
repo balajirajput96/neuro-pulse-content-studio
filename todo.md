@@ -60,3 +60,10 @@
 - [x] Activate the owner dashboard's approved free daily and weekly private schedules, then verify their configured state.
 - [x] Create a detailed safe technical runbook of implemented code, command categories, schedules, integrations, and remaining blockers.
 - [x] Add an automation extension guide that preserves manual owner confirmation for all external publishing.
+- [x] Audit authorized Antigravity, Google, GitHub, Julius, YouTube, and social-service integration capabilities without extracting credentials or enabling public posting.
+- [x] Add permanent Neuroscience and Psychology editorial taxonomy with high-scrutiny Diet and Mental Health review rules.
+- [x] Add private source-pack, cross-validation, and health-content red-flag controls for Hinglish reel drafting.
+- [x] Add private multi-service run-ledger fields, schedule monitoring, and pause/resume-ready operational status without auto-publish paths.
+- [x] Document verified integration status, official setup blockers, GitHub reproducibility policy, and per-post owner-confirmation architecture.
+- [x] Add a private draft-level source-pack model and UI carrying primary source URL, population context, cross-validation, limitation notes, and Hinglish safety guidance.
+- [x] Block draft progression and approval when source-pack requirements or health-content red-flag controls are incomplete, with test coverage and visible owner review states.

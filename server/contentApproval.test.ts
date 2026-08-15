@@ -50,7 +50,7 @@ describe("approveDraftForOwner", () => {
     const { db } = createFakeDb({ ...baseDraft, notMedicalAdvice: false });
     mocks.getDb.mockResolvedValue(db);
 
-    await expect(approveDraftForOwner(9, 18)).rejects.toThrow("This draft cannot be approved until all readiness requirements are complete");
+    await expect(approveDraftForOwner(9, 18)).rejects.toThrow("This draft cannot be approved until source-pack, health-safety, and production readiness requirements are complete");
     expect(db.update).not.toHaveBeenCalled();
     expect(db.insert).not.toHaveBeenCalled();
   });

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { AUTOMATION_CRONS } from "./automation";
+import { AUTOMATION_CRONS, inferEditorialCategory } from "./automation";
 
 describe("free content automation schedule", () => {
   it("defines only the daily intake and weekly preparation jobs", () => {
@@ -11,5 +11,10 @@ describe("free content automation schedule", () => {
     expect(AUTOMATION_CRONS.weekly_compilation.trim().split(/\s+/)).toHaveLength(6);
     expect(AUTOMATION_CRONS.daily_research).toBe("0 30 3 * * *");
     expect(AUTOMATION_CRONS.weekly_compilation).toBe("0 30 4 * * 0");
+  });
+
+  it("routes behavioural and cognitive research to the permanent Psychology review track", () => {
+    expect(inferEditorialCategory("Cognitive flexibility and resilience in adolescence")).toBe("psychology");
+    expect(inferEditorialCategory("Neural mechanisms of memory consolidation")).toBe("neuroscience");
   });
 });

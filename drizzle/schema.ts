@@ -40,7 +40,11 @@ export const studyCandidates = mysqlTable("study_candidates", {
   ownerId: int("ownerId").notNull(),
   title: text("title").notNull(),
   topicKey: varchar("topicKey", { length: 512 }).notNull(),
+  contentCategory: mysqlEnum("contentCategory", ["neuroscience", "psychology", "diet", "mental_health"])
+    .default("neuroscience")
+    .notNull(),
   journal: varchar("journal", { length: 255 }).notNull(),
+  sourceUrl: varchar("sourceUrl", { length: 1024 }),
   doi: varchar("doi", { length: 512 }),
   pmid: varchar("pmid", { length: 64 }),
   studyType: mysqlEnum("studyType", [
@@ -55,6 +59,15 @@ export const studyCandidates = mysqlTable("study_candidates", {
     .default("needs_review")
     .notNull(),
   screeningReason: text("screeningReason"),
+  populationContext: text("populationContext"),
+  reviewRisk: mysqlEnum("reviewRisk", ["standard", "high_scrutiny"])
+    .default("standard")
+    .notNull(),
+  crossValidationStatus: mysqlEnum("crossValidationStatus", ["not_started", "confirmed", "needs_review"])
+    .default("not_started")
+    .notNull(),
+  requiresOwnerReview: boolean("requiresOwnerReview").default(false).notNull(),
+  editorialFlags: json("editorialFlags").$type<string[]>(),
   publicationYear: int("publicationYear"),
   indexedAt: timestamp("indexedAt"),
   isDuplicate: boolean("isDuplicate").default(false).notNull(),
@@ -80,6 +93,18 @@ export const reelDrafts = mysqlTable("reel_drafts", {
   sourceCited: boolean("sourceCited").default(false).notNull(),
   limitationLinePresent: boolean("limitationLinePresent").default(false).notNull(),
   notMedicalAdvice: boolean("notMedicalAdvice").default(false).notNull(),
+  sourcePack: json("sourcePack").$type<{
+    primarySourceUrl: string;
+    populationContext: string;
+    crossValidationStatus: "not_started" | "confirmed" | "needs_review";
+    limitationNotes: string;
+    hinglishSafetyGuidance: string;
+    healthRedFlags: string[];
+  }>(),
+  sourcePackStatus: mysqlEnum("sourcePackStatus", ["missing", "needs_review", "complete"])
+    .default("missing")
+    .notNull(),
+  healthRedFlagsCleared: boolean("healthRedFlagsCleared").default(false).notNull(),
   approvedForPublish: boolean("approvedForPublish").default(false).notNull(),
   approvedByOwnerId: int("approvedByOwnerId"),
   approvedAt: timestamp("approvedAt"),
@@ -173,7 +198,29 @@ export const automationRuns = mysqlTable("automation_runs", {
   completedAt: timestamp("completedAt"),
   resultSummary: text("resultSummary"),
   candidateCount: int("candidateCount").default(0).notNull(),
+  sourceSystem: varchar("sourceSystem", { length: 64 }).default("neuropulse_heartbeat").notNull(),
+  nextOwnerAction: text("nextOwnerAction"),
 });
+
+export const serviceIntegrations = mysqlTable(
+  "service_integrations",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    ownerId: int("ownerId").notNull(),
+    serviceKey: varchar("serviceKey", { length: 64 }).notNull(),
+    displayName: varchar("displayName", { length: 128 }).notNull(),
+    status: mysqlEnum("status", ["available", "private_only", "needs_owner_login", "needs_official_credential", "blocked"])
+      .notNull(),
+    privateAutomationAllowed: boolean("privateAutomationAllowed").default(false).notNull(),
+    publicSubmissionAllowed: boolean("publicSubmissionAllowed").default(false).notNull(),
+    detail: text("detail").notNull(),
+    nextOwnerAction: text("nextOwnerAction"),
+    lastCheckedAt: timestamp("lastCheckedAt").defaultNow().notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  table => [uniqueIndex("service_integrations_owner_key").on(table.ownerId, table.serviceKey)],
+);
 
 export type StudyCandidate = typeof studyCandidates.$inferSelect;
 export type ReelDraft = typeof reelDrafts.$inferSelect;
@@ -182,3 +229,4 @@ export type WeeklyBundle = typeof weeklyBundles.$inferSelect;
 export type BlockerNotice = typeof blockerNotices.$inferSelect;
 export type AutomationJob = typeof automationJobs.$inferSelect;
 export type AutomationRun = typeof automationRuns.$inferSelect;
+export type ServiceIntegration = typeof serviceIntegrations.$inferSelect;

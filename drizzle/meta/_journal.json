@@ -22,6 +22,27 @@
       "when": 1786590251585,
       "tag": "0002_tiny_sasquatch",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1786805678563,
+      "tag": "0003_polite_the_santerians",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1786805703185,
+      "tag": "0004_abnormal_maddog",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1786806261173,
+      "tag": "0005_stale_bedlam",
+      "breakpoints": true
     }
   ]
 }
