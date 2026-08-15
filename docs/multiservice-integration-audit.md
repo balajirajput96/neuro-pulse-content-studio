@@ -34,6 +34,10 @@ Only private repositories should store version-controlled, non-secret material: 
 
 Every row in the dashboard ledger has `publicSubmissionAllowed = false`. A future platform connection may only add a **Prepare for Owner Review** state. The actual public action must show the exact asset, destination account, caption, citation/disclaimer package, and visibility, then receive a fresh one-use owner confirmation immediately before submission.
 
+## Verification note
+
+The unauthenticated development preview correctly presents only the secure sign-in screen; private run history, integration status, source packs, and schedule controls remain inaccessible until the owner session is established.
+
 ## References
 
 [1] [Google Antigravity CLI — Installation & authentication](https://antigravity.google/docs/cli/install)
