@@ -30,6 +30,13 @@ type ServiceIntegrationCard = {
   nextOwnerAction: string | null;
 };
 
+type ResearchTriage = {
+  label: string;
+  value: number;
+  detail: string;
+  tone: "neutral" | "attention" | "critical";
+};
+
 const initialForm: CandidateForm = { title: "", journal: "", doi: "", sourceUrl: "", populationContext: "", contentCategory: "neuroscience", studyType: "Human cohort" };
 
 const keyframeAssets = [
@@ -156,6 +163,32 @@ export default function Home() {
   const readyDrafts = workspace.drafts.filter(d => d.sourceCited && d.limitationLinePresent && d.notMedicalAdvice && d.sourcePackStatus === "complete" && d.healthRedFlagsCleared && d.bgmStatus === "ready" && d.voiceStatus === "ready");
   const publishedCount = workspace.drafts.filter(d => d.approvedForPublish).length;
   const draftToApprove = workspace.drafts.find(d => d.id === approvalDraftId);
+  const researchTriage: ResearchTriage[] = useMemo(() => [
+    {
+      label: "Needs evidence review",
+      value: workspace.studies.filter(study => study.screeningStatus === "needs_review").length,
+      detail: "Source and limitation check is still required.",
+      tone: "attention",
+    },
+    {
+      label: "Cross-check pending",
+      value: workspace.studies.filter(study => study.crossValidationStatus !== "confirmed").length,
+      detail: "Do not promote until supporting context is assessed.",
+      tone: "attention",
+    },
+    {
+      label: "High-scrutiny subjects",
+      value: workspace.studies.filter(study => study.reviewRisk === "high_scrutiny").length,
+      detail: "Diet or Mental Health requires heightened review.",
+      tone: "critical",
+    },
+    {
+      label: "Source-ready candidates",
+      value: workspace.studies.filter(study => Boolean(study.sourceUrl) && study.screeningStatus === "passed").length,
+      detail: "Eligible for a private source-pack review.",
+      tone: "neutral",
+    },
+  ], [workspace.studies]);
 
   const bundleReadiness = useMemo(() => workspace.bundles.map(bundle => {
     const links = workspace.bundleLinks.filter(link => link.bundleId === bundle.id);
@@ -237,6 +270,9 @@ export default function Home() {
 
         <section id="daily-research" className="scroll-mt-6 border-t border-[#d9ddd6] pt-9">
           <SectionHeading eyebrow="01 · Daily research queue" title="Evidence before aesthetics." detail="Neuroscience and Psychology are permanent priorities. Diet and Mental Health candidates stay in high-scrutiny review until their source, context, and limitation requirements are complete." action={<Dialog open={captureOpen} onOpenChange={setCaptureOpen}><DialogTrigger asChild><Button className="rounded-xl bg-[#202633] px-4 hover:bg-[#303949]"><Plus className="mr-2 h-4" />Add candidate</Button></DialogTrigger><DialogContent className="max-w-xl"><DialogHeader><DialogTitle className="font-serif text-2xl">Add a study candidate</DialogTitle><DialogDescription>Every source is screened for category risk, duplicate topics, population context, and limitation language before it can move to drafting.</DialogDescription></DialogHeader><form className="grid gap-4" onSubmit={event => { event.preventDefault(); addCandidate.mutate({ ...form, doi: form.doi || undefined, sourceUrl: form.sourceUrl || undefined, populationContext: form.populationContext || undefined }); }}><div className="grid gap-2"><Label htmlFor="study-title">Study title</Label><Input id="study-title" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} placeholder="Enter the primary study title" required /></div><div className="grid grid-cols-1 gap-4 sm:grid-cols-2"><div className="grid gap-2"><Label htmlFor="journal">Journal</Label><Input id="journal" value={form.journal} onChange={e => setForm({ ...form, journal: e.target.value })} placeholder="Journal name" required /></div><div className="grid gap-2"><Label>Editorial category</Label><Select value={form.contentCategory} onValueChange={(value: CandidateForm["contentCategory"]) => setForm({ ...form, contentCategory: value })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="neuroscience">Neuroscience</SelectItem><SelectItem value="psychology">Psychology</SelectItem><SelectItem value="diet">Diet · high scrutiny</SelectItem><SelectItem value="mental_health">Mental health · high scrutiny</SelectItem></SelectContent></Select></div></div><div className="grid grid-cols-1 gap-4 sm:grid-cols-2"><div className="grid gap-2"><Label>Study type</Label><Select value={form.studyType} onValueChange={(value: CandidateForm["studyType"]) => setForm({ ...form, studyType: value })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="Human cohort">Human cohort</SelectItem><SelectItem value="Systematic review">Systematic review</SelectItem><SelectItem value="Replication study">Replication study</SelectItem><SelectItem value="Clinical trial">Clinical trial</SelectItem><SelectItem value="Preclinical model">Preclinical model</SelectItem></SelectContent></Select></div><div className="grid gap-2"><Label htmlFor="doi">DOI or PMID</Label><Input id="doi" value={form.doi} onChange={e => setForm({ ...form, doi: e.target.value })} placeholder="Optional source identifier" /></div></div><div className="grid gap-2"><Label htmlFor="source-url">Primary source URL</Label><Input id="source-url" value={form.sourceUrl} onChange={e => setForm({ ...form, sourceUrl: e.target.value })} placeholder="https://pubmed.ncbi.nlm.nih.gov/..." /></div><div className="grid gap-2"><Label htmlFor="population-context">Population or study context</Label><Input id="population-context" value={form.populationContext} onChange={e => setForm({ ...form, populationContext: e.target.value })} placeholder="Required for high-scrutiny Diet and Mental Health items" /></div><DialogFooter><Button type="submit" disabled={addCandidate.isPending}>{addCandidate.isPending ? "Screening…" : "Add to queue"}</Button></DialogFooter></form></DialogContent></Dialog>} />
+          <div className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4" aria-label="Private research triage">
+            {researchTriage.map(item => <article key={item.label} className={`rounded-xl border p-4 ${item.tone === "critical" ? "border-[#ecd2ca] bg-[#fff8f5]" : item.tone === "attention" ? "border-[#ead9af] bg-[#fffbf1]" : "border-[#d5e2ed] bg-[#f5f9fc]"}`}><p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#737b7d]">{item.label}</p><p className="mt-2 font-serif text-3xl text-[#202633]">{item.value}</p><p className="mt-1 text-xs leading-5 text-[#687076]">{item.detail}</p></article>)}
+          </div>
           {isLoading ? <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">{[1, 2, 3].map(item => <Skeleton key={item} className="h-44 rounded-2xl bg-[#e5e7e2]" />)}</div> : workspace.studies.length ? <div className="grid gap-3 xl:grid-cols-3">{workspace.studies.map(study => <article key={study.id} className="rounded-2xl border border-[#d9ddd6] bg-white p-5 shadow-[0_10px_28px_rgba(25,28,36,0.035)]"><div className="flex items-start justify-between gap-3"><div className="flex flex-wrap gap-2"><StatusPill value={study.screeningStatus} /><Badge variant="outline" className="rounded-full border-[#d7d9d5] bg-[#fafaf7] text-[10px] font-semibold uppercase tracking-[0.1em] text-[#5e6964]">{study.contentCategory.replaceAll("_", " ")}</Badge></div>{study.isDuplicate && <Badge className="rounded-full bg-[#fff0ee] text-[10px] font-semibold text-[#a34839] hover:bg-[#fff0ee]">POSSIBLE REPEAT</Badge>}</div><h3 className="mt-4 font-serif text-xl leading-snug text-[#20232b]">{study.title}</h3><dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 border-t border-[#eceeea] pt-4 text-xs"><div><dt className="font-semibold uppercase tracking-[0.1em] text-[#8a9191]">Journal</dt><dd className="mt-1 text-[#4f5758]">{study.journal}</dd></div><div><dt className="font-semibold uppercase tracking-[0.1em] text-[#8a9191]">Review level</dt><dd className="mt-1 text-[#4f5758]">{study.reviewRisk.replaceAll("_", " ")}</dd></div><div><dt className="font-semibold uppercase tracking-[0.1em] text-[#8a9191]">Study type</dt><dd className="mt-1 text-[#4f5758]">{study.studyType}</dd></div><div><dt className="font-semibold uppercase tracking-[0.1em] text-[#8a9191]">Cross-check</dt><dd className="mt-1 text-[#4f5758]">{study.crossValidationStatus.replaceAll("_", " ")}</dd></div><div className="col-span-2"><dt className="font-semibold uppercase tracking-[0.1em] text-[#8a9191]">DOI / PMID</dt><dd className="mt-1 break-all font-mono text-[11px] text-[#4f5758]">{study.doi || study.pmid || "Identifier pending"}</dd></div></dl>{study.sourceUrl && <a href={study.sourceUrl} target="_blank" rel="noreferrer" className="mt-4 inline-flex text-xs font-medium text-[#315e88] underline underline-offset-4">Open primary source</a>}<div className="mt-4 rounded-xl bg-[#f6f7f4] px-3 py-2.5 text-xs leading-5 text-[#66706b]"><span className="font-semibold text-[#404845]">Screening note · </span>{study.screeningReason || "No screening note recorded."}{study.populationContext ? <span className="block pt-2"><span className="font-semibold text-[#404845]">Context · </span>{study.populationContext}</span> : null}</div></article>)}</div> : <EmptyPanel icon={FileSearch} title="The research queue is clear." detail="Add an evidence-screened study candidate to start a source trail, duplicate check, and editorial screen." />}
         </section>
 

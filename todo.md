@@ -67,3 +67,6 @@
 - [x] Document verified integration status, official setup blockers, GitHub reproducibility policy, and per-post owner-confirmation architecture.
 - [x] Add a private draft-level source-pack model and UI carrying primary source URL, population context, cross-validation, limitation notes, and Hinglish safety guidance.
 - [x] Block draft progression and approval when source-pack requirements or health-content red-flag controls are incomplete, with test coverage and visible owner review states.
+- [x] Defer externally blocked Meta and Google AI Studio setup without attempting any verification, IAM, or provider-restriction bypass.
+- [x] Audit remaining private research-to-draft workflow opportunities that use only already-authorized, no-cost capabilities.
+- [x] Implement the highest-value safe private workflow enhancement and validate it without creating media or public submissions.
