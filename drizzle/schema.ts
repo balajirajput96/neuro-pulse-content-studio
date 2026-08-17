@@ -93,6 +93,17 @@ export const reelDrafts = mysqlTable("reel_drafts", {
   voiceStatus: mysqlEnum("voiceStatus", ["missing", "reference_ready", "ready", "blocked"])
     .default("missing")
     .notNull(),
+  voiceReferenceAssessment: json("voiceReferenceAssessment").$type<{
+    sourceType: "instagram_reel" | "uploaded_audio";
+    sourceUrl?: string;
+    creatorAuthorizationRecordedAt: string;
+    sourceDurationSeconds: number;
+    assessedSegmentSeconds: number;
+    languageDetected?: string;
+    assessmentStatus: "pending" | "rejected" | "qualified";
+    outcomeReason: string;
+    assessedAt: string;
+  }>(),
   sourceCited: boolean("sourceCited").default(false).notNull(),
   limitationLinePresent: boolean("limitationLinePresent").default(false).notNull(),
   notMedicalAdvice: boolean("notMedicalAdvice").default(false).notNull(),

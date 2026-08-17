@@ -74,3 +74,10 @@
 - [x] Add a private secondary-source intake path that preserves PubMed-first provenance, category screening, duplicate controls, and no-publication behavior.
 - [x] Add a reusable Hinglish script-quality checklist and private draft template with evidence, caveat, and health-safety fields.
 - [x] Validate the expanded evidence-to-draft workflow with tests, documentation, and no-publication checks.
+- [x] Assess a creator-authorized Instagram voice reference for clean single-speaker duration, clarity, background contamination, and consent traceability.
+- [x] Record only the private voice-readiness outcome and retain a blocked state when source quality is insufficient; do not generate or publish media.
+- [x] Obtain an inspectable creator-authorized voice source and verify duration, single-speaker continuity, and noise/music contamination with reproducible analysis evidence.
+- [x] Persist voice-reference assessment details in explicit private application data and verify the affected draft remains blocked until a qualified source is approved.
+- [x] Surface the recorded voice-readiness reason to the owner in the private dashboard and validate the no-generation/no-publication boundary.
+- [x] Produce a reproducible private audio-quality artifact that explicitly assesses single-speaker continuity and music/background-noise contamination for the creator-authorized source.
+- [ ] If the Instagram source remains unsuitable, obtain a clean 60–90 second creator-authorized recording and evaluate it through the same private readiness flow.

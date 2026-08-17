@@ -1,0 +1,1 @@
+ALTER TABLE `reel_drafts` ADD `voiceReferenceAssessment` json;
