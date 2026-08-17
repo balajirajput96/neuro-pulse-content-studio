@@ -81,3 +81,4 @@
 - [x] Surface the recorded voice-readiness reason to the owner in the private dashboard and validate the no-generation/no-publication boundary.
 - [x] Produce a reproducible private audio-quality artifact that explicitly assesses single-speaker continuity and music/background-noise contamination for the creator-authorized source.
 - [ ] If the Instagram source remains unsuitable, obtain a clean 60–90 second creator-authorized recording and evaluate it through the same private readiness flow.
+- [x] Inspect up to three additional creator-owned original-audio Instagram reels for a verifiable clean 60–90 second narration candidate without enabling voice generation.
