@@ -1,0 +1,1 @@
+ALTER TABLE `study_candidates` ADD `discoverySource` enum('pubmed','europe_pmc','manual') DEFAULT 'manual' NOT NULL;

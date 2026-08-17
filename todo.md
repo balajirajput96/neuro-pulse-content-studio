@@ -70,3 +70,7 @@
 - [x] Defer externally blocked Meta and Google AI Studio setup without attempting any verification, IAM, or provider-restriction bypass.
 - [x] Audit remaining private research-to-draft workflow opportunities that use only already-authorized, no-cost capabilities.
 - [x] Implement the highest-value safe private workflow enhancement and validate it without creating media or public submissions.
+- [x] Research and validate a supported no-cost secondary peer-reviewed discovery interface with provenance and deduplication requirements.
+- [x] Add a private secondary-source intake path that preserves PubMed-first provenance, category screening, duplicate controls, and no-publication behavior.
+- [x] Add a reusable Hinglish script-quality checklist and private draft template with evidence, caveat, and health-safety fields.
+- [x] Validate the expanded evidence-to-draft workflow with tests, documentation, and no-publication checks.

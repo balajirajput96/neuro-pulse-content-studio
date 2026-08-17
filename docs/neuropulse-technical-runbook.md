@@ -286,6 +286,12 @@ The workflow was extended without connecting new external accounts, creating med
 
 The review screen requires an authenticated owner session. An unauthenticated visitor sees only the secure sign-in page; run history, integration status, source packs, and schedule controls are not exposed.
 
+### 10.2 Supplementary evidence discovery and Hinglish script template — 17 August 2026
+
+The single private daily intake job now queries **PubMed first** and then a small Europe PMC `SRC:PMC` metadata search sorted by recent date. Europe PMC is a supplementary discovery source, not a quality or peer-review certification. Each Europe PMC record is labelled `discoverySource = "europe_pmc"`, enters `needs_review`, receives the same normalized-topic duplicate check as PubMed, and remains subject to source-pack, limitation, and owner-review requirements. A Europe PMC outage is recorded in the run summary but does not prevent the established PubMed intake from completing. Europe PMC documents that its REST API exposes publication metadata in JSON and supports date sorting; it also distinguishes access to open content and metadata from automated bulk downloading of other content. [4]
+
+The owner dashboard now displays a reusable **60-second Hinglish evidence-draft template**. Its five private stages are: a caveated hook, study context, plain-language finding, bounded relevance, and a limitation/source close. The template requires source-card, limitation, no-diagnosis/treatment-claim, and owner-review checks. It includes a standard safe closing line and does not generate audio, video, captions, or public submissions.
+
 ## 11. Safe automation-extension guide
 
 Future improvements may automate **private preparation** but must preserve the owner-confirmed public-distribution gate. Use the following decision table before adding any scheduled task.
@@ -373,3 +379,5 @@ Public distribution has not been automated and must remain manually authorized, 
 [2] [Google Cloud, *Manage API keys*](https://docs.cloud.google.com/docs/authentication/api-keys)
 
 [3] [Meta Business Help Center, *How to require two-factor authentication for people in your Meta business portfolio*](https://www.facebook.com/business/help/280940009201586)
+
+[4] [Europe PMC, *Articles RESTful API*](https://europepmc.org/RestfulWebService)

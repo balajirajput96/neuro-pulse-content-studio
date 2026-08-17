@@ -43,6 +43,13 @@
       "when": 1786806261173,
       "tag": "0005_stale_bedlam",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1786987642273,
+      "tag": "0006_certain_naoko",
+      "breakpoints": true
     }
   ]
 }

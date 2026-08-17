@@ -17,4 +17,9 @@ describe("free content automation schedule", () => {
     expect(inferEditorialCategory("Cognitive flexibility and resilience in adolescence")).toBe("psychology");
     expect(inferEditorialCategory("Neural mechanisms of memory consolidation")).toBe("neuroscience");
   });
+
+  it("keeps the secondary literature discovery inside the existing private daily job", () => {
+    expect(Object.keys(AUTOMATION_CRONS)).toContain("daily_research");
+    expect(Object.keys(AUTOMATION_CRONS)).not.toContain("public_publish");
+  });
 });

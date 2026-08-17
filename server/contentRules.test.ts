@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { approvalBlocker, buildEditorialFlags, isDraftReady, isHighScrutinyCategory, isWeeklyBundleReady, isWorkspaceOwnerRole, normalizeTopic } from "../shared/contentModels";
+import { approvalBlocker, buildEditorialFlags, buildHinglishScriptTemplate, isDraftReady, isHighScrutinyCategory, isWeeklyBundleReady, isWorkspaceOwnerRole, normalizeTopic } from "../shared/contentModels";
 
 describe("content workflow rules", () => {
   it("normalizes topic punctuation before duplicate matching", () => {
@@ -70,5 +70,13 @@ describe("content workflow rules", () => {
     expect(buildEditorialFlags("diet", "https://pubmed.ncbi.nlm.nih.gov/123456/", undefined)).toContain("missing_limitation");
     expect(buildEditorialFlags("mental_health", undefined, "Adult cohort with a stated observational limitation")).toContain("missing_source_citation");
     expect(buildEditorialFlags("neuroscience", "https://pubmed.ncbi.nlm.nih.gov/123456/", undefined)).toEqual([]);
+  });
+
+  it("uses a reusable Hinglish template that preserves source, caveat, and owner-review requirements", () => {
+    const template = buildHinglishScriptTemplate("Memory and sleep", "psychology");
+    expect(template.sections).toHaveLength(5);
+    expect(template.requiredChecks).toContain("source_card");
+    expect(template.requiredChecks).toContain("owner_review_before_recording");
+    expect(template.safeClosingLine).toContain("medical advice");
   });
 });

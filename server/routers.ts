@@ -7,7 +7,7 @@ import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { approveDraftForOwner, findLoggedTopic, getWorkspaceData, initializeCurrentWorkingDraft } from "./contentDb";
 import { getDb } from "./db";
 import { studyCandidates } from "../drizzle/schema";
-import { buildEditorialFlags, isHighScrutinyCategory, isWorkspaceOwnerRole, normalizeTopic, type ContentCategory } from "../shared/contentModels";
+import { buildEditorialFlags, buildHinglishScriptTemplate, isHighScrutinyCategory, isWorkspaceOwnerRole, normalizeTopic, type ContentCategory } from "../shared/contentModels";
 import { attachScheduleTaskUid, AUTOMATION_CRONS, ensureAutomationJobs, getAutomationState, runAutomationJobByOwner, setAutomationJobEnabled, type AutomationJobType } from "./automation";
 import { createHeartbeatJob } from "./_core/heartbeat";
 import { parse as parseCookie } from "cookie";
@@ -74,7 +74,8 @@ export const appRouter = router({
           ownerId: ctx.user.id,
           title: input.title,
           topicKey,
-          contentCategory: category,
+        contentCategory: category,
+          discoverySource: "manual",
           journal: input.journal,
           sourceUrl: input.sourceUrl,
           doi: input.doi,
@@ -102,6 +103,9 @@ export const appRouter = router({
       .input(z.object({ reelDraftId: z.number().int().positive() }))
       .mutation(async ({ ctx, input }) => approveDraftForOwner(ctx.user.id, input.reelDraftId)),
     initializeCurrentDraft: ownerProcedure.mutation(async ({ ctx }) => initializeCurrentWorkingDraft(ctx.user.id)),
+    getHinglishScriptTemplate: ownerProcedure
+      .input(z.object({ topic: z.string().min(4).max(180), contentCategory: z.enum(["neuroscience", "psychology", "diet", "mental_health"]) }))
+      .query(({ input }) => buildHinglishScriptTemplate(input.topic, input.contentCategory)),
   }),
   automation: router({
     get: ownerProcedure.query(async ({ ctx }) => getAutomationState(ctx.user.id)),

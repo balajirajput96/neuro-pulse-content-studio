@@ -35,6 +35,18 @@ type PubMedRecord = {
   articleids?: { idtype?: string; value?: string }[];
 };
 
+type EuropePmcRecord = {
+  id?: string;
+  source?: string;
+  title?: string;
+  journalTitle?: string;
+  journal?: string;
+  pubYear?: string;
+  doi?: string;
+  pmid?: string;
+  authorString?: string;
+};
+
 function weekStartUtc(date = new Date()) {
   const copy = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
   const day = copy.getUTCDay() || 7;
@@ -66,6 +78,18 @@ async function fetchRecentPubMedRecords(): Promise<PubMedRecord[]> {
   if (!summaryResponse.ok) throw new Error(`PubMed summary returned ${summaryResponse.status}`);
   const payload = await summaryResponse.json() as { result?: Record<string, PubMedRecord | string[]> };
   return ids.map(id => payload.result?.[id]).filter((record): record is PubMedRecord => typeof record === "object" && record !== null);
+}
+
+async function fetchRecentEuropePmcRecords(): Promise<EuropePmcRecord[]> {
+  const search = new URL("https://www.ebi.ac.uk/europepmc/webservices/rest/search");
+  search.searchParams.set("query", "(TITLE:neuroscience OR TITLE:psychology OR ABSTRACT:neuroscience OR ABSTRACT:psychology) AND SRC:PMC sort_date:y");
+  search.searchParams.set("format", "json");
+  search.searchParams.set("resultType", "core");
+  search.searchParams.set("pageSize", "5");
+  const response = await fetch(search, { headers: { accept: "application/json" } });
+  if (!response.ok) throw new Error(`Europe PMC search returned ${response.status}`);
+  const payload = await response.json() as { resultList?: { result?: EuropePmcRecord[] } };
+  return payload.resultList?.result ?? [];
 }
 
 export async function ensureAutomationJobs(ownerId: number) {
@@ -124,7 +148,14 @@ async function runDailyResearch(job: typeof automationJobs.$inferSelect, trigger
   });
   const runId = Number(runResult[0].insertId);
   try {
-    const records = await fetchRecentPubMedRecords();
+    const [pubMedResult, europePmcResult] = await Promise.allSettled([
+      fetchRecentPubMedRecords(),
+      fetchRecentEuropePmcRecords(),
+    ]);
+    if (pubMedResult.status === "rejected") throw pubMedResult.reason;
+    const records = pubMedResult.value;
+    const europePmcRecords = europePmcResult.status === "fulfilled" ? europePmcResult.value : [];
+    const europePmcUnavailable = europePmcResult.status === "rejected";
     let inserted = 0;
     for (const record of records) {
       const title = record.title?.replace(/\.$/, "").trim();
@@ -148,6 +179,7 @@ async function runDailyResearch(job: typeof automationJobs.$inferSelect, trigger
         title,
         topicKey,
         contentCategory,
+        discoverySource: "pubmed",
         journal: record.fulljournalname || record.source || "PubMed",
         sourceUrl,
         doi,
@@ -167,7 +199,48 @@ async function runDailyResearch(job: typeof automationJobs.$inferSelect, trigger
       });
       inserted += 1;
     }
-    const summary = `PubMed intake checked ${records.length} recent records and added ${inserted} new candidate${inserted === 1 ? "" : "s"} for editorial review.`;
+    for (const record of europePmcRecords) {
+      const title = record.title?.replace(/\.$/, "").trim();
+      if (!title) continue;
+      const topicKey = normalizeTopic(title);
+      const existing = await db.select({ id: studyCandidates.id })
+        .from(studyCandidates)
+        .where(and(eq(studyCandidates.ownerId, job.ownerId), eq(studyCandidates.topicKey, topicKey)))
+        .limit(1);
+      if (existing[0]) continue;
+      const contentCategory = inferEditorialCategory(title);
+      const priorLog = await db.select({ id: contentLog.id })
+        .from(contentLog)
+        .where(and(eq(contentLog.ownerId, job.ownerId), eq(contentLog.topicKey, topicKey)))
+        .limit(1);
+      const sourceId = record.id || record.pmid || topicKey;
+      const sourceUrl = `https://europepmc.org/article/${record.source || "PMC"}/${sourceId}`;
+      await db.insert(studyCandidates).values({
+        ownerId: job.ownerId,
+        title,
+        topicKey,
+        contentCategory,
+        discoverySource: "europe_pmc",
+        journal: record.journalTitle || record.journal || "Europe PMC",
+        sourceUrl,
+        doi: record.doi,
+        pmid: record.pmid,
+        studyType: "Unclassified",
+        publicationYear: Number(record.pubYear) || undefined,
+        screeningStatus: "needs_review",
+        screeningReason: priorLog[0]
+          ? "Possible topic repeat: matched against the approved content log. Editorial review required."
+          : "Europe PMC supplementary intake: metadata identified, but peer-review status, study design, and limitations require editorial review.",
+        reviewRisk: "standard",
+        crossValidationStatus: "needs_review",
+        requiresOwnerReview: true,
+        editorialFlags: buildEditorialFlags(contentCategory, sourceUrl),
+        indexedAt: new Date(),
+        isDuplicate: Boolean(priorLog[0]),
+      });
+      inserted += 1;
+    }
+    const summary = `Private evidence intake checked ${records.length} PubMed and ${europePmcRecords.length} Europe PMC records, adding ${inserted} new candidate${inserted === 1 ? "" : "s"} for editorial review.${europePmcUnavailable ? " Europe PMC was unavailable this run; PubMed intake completed normally." : ""}`;
     await db.update(automationRuns).set({
       status: "succeeded",
       completedAt: new Date(),

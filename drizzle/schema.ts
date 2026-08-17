@@ -43,6 +43,9 @@ export const studyCandidates = mysqlTable("study_candidates", {
   contentCategory: mysqlEnum("contentCategory", ["neuroscience", "psychology", "diet", "mental_health"])
     .default("neuroscience")
     .notNull(),
+  discoverySource: mysqlEnum("discoverySource", ["pubmed", "europe_pmc", "manual"])
+    .default("manual")
+    .notNull(),
   journal: varchar("journal", { length: 255 }).notNull(),
   sourceUrl: varchar("sourceUrl", { length: 1024 }),
   doi: varchar("doi", { length: 512 }),

@@ -11,7 +11,7 @@ import {
   weeklyBundleReels,
   weeklyBundles,
 } from "../drizzle/schema";
-import { approvalBlocker, normalizeTopic } from "../shared/contentModels";
+import { approvalBlocker, buildHinglishScriptTemplate, normalizeTopic } from "../shared/contentModels";
 import { getDb } from "./db";
 
 export async function getWorkspaceData(ownerId: number) {
@@ -136,6 +136,7 @@ export async function initializeCurrentWorkingDraft(ownerId: number) {
     title: "Why structural-MRI brain signatures must reproduce across independent sites",
     topicKey: normalizeTopic("Why structural-MRI brain signatures must reproduce across independent sites"),
     contentCategory: "neuroscience",
+    discoverySource: "manual",
     journal: "Nature Neuroscience",
     sourceUrl: "https://pubmed.ncbi.nlm.nih.gov/?term=10.1038%2Fs41593-026-02359-0",
     doi: "10.1038/s41593-026-02359-0",
@@ -156,12 +157,7 @@ export async function initializeCurrentWorkingDraft(ownerId: number) {
     studyCandidateId,
     topic: "A brain scan finding that refused to repeat",
     status: "blocked",
-    narrationSpans: [
-      "Socho, ek brain scan ek dramatic pattern dikhaye… aur jab doosri labs usi pattern ko check karein, woh repeat hi na ho.",
-      "Ek nayi Nature Neuroscience analysis ne structural MRI measures ko independent study sites par compare kiya.",
-      "Cortical thickness aur grey-matter volume ke patterns aksar consistently reproduce nahi hue.",
-      "Yeh diagnosis advice nahi hai—bas ek reminder hai: science ko repeatable hona chahiye.",
-    ],
+    narrationSpans: buildHinglishScriptTemplate("A brain scan finding that refused to repeat", "neuroscience").sections.map(section => `${section.label}: ${section.prompt}`),
     visualKeyframes: [
       { label: "Presenter + brain", status: "ready" },
       { label: "Repeat panels", status: "ready" },

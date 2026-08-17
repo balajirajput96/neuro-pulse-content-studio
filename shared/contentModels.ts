@@ -22,11 +22,29 @@ export const HEALTH_CONTENT_RED_FLAGS = [
   "missing_source_citation",
 ] as const;
 
+export const HINGLISH_SCRIPT_QUALITY_CHECKS = [
+  "evidence_first_hook",
+  "plain_language_finding",
+  "population_or_context",
+  "limitation_line",
+  "no_diagnosis_or_treatment_claim",
+  "source_card",
+  "owner_review_before_recording",
+] as const;
+
 export type ScreeningStatus = (typeof SCREENING_STATUSES)[number];
 export type DraftStatus = (typeof DRAFT_STATUSES)[number];
 export type BlockerType = (typeof BLOCKER_TYPES)[number];
 export type ContentCategory = (typeof CONTENT_CATEGORIES)[number];
 export type HealthContentRedFlag = (typeof HEALTH_CONTENT_RED_FLAGS)[number];
+export type HinglishScriptQualityCheck = (typeof HINGLISH_SCRIPT_QUALITY_CHECKS)[number];
+
+export type HinglishScriptTemplate = {
+  title: string;
+  sections: { label: string; prompt: string }[];
+  requiredChecks: HinglishScriptQualityCheck[];
+  safeClosingLine: string;
+};
 
 export type ReadinessChecklist = {
   sourceCited: boolean;
@@ -89,4 +107,20 @@ export function buildEditorialFlags(category: ContentCategory, sourceUrl?: strin
   if (!sourceUrl) flags.push("missing_source_citation");
   if (isHighScrutinyCategory(category) && !populationContext) flags.push("missing_limitation");
   return flags;
+}
+
+export function buildHinglishScriptTemplate(topic: string, category: ContentCategory): HinglishScriptTemplate {
+  const highScrutiny = isHighScrutinyCategory(category);
+  return {
+    title: `60-second Hinglish evidence draft · ${topic}`,
+    sections: [
+      { label: "0–5s · Hook", prompt: "Surprising observation bolo, lekin certainty ya personal promise mat karo." },
+      { label: "5–18s · Study context", prompt: "Journal, study type, aur jis population/context par finding based hai woh clear karo." },
+      { label: "18–38s · Finding", prompt: "‘Study ne observe kiya’ language use karke plain Hinglish mein finding explain karo." },
+      { label: "38–50s · Why it matters", prompt: "Everyday relevance explain karo, bina diagnosis, treatment, dosage, ya guaranteed outcome claim kiye." },
+      { label: "50–60s · Caveat + source", prompt: highScrutiny ? "Limitation, medical-safety line, aur primary source card compulsory rakho." : "Limitation line aur primary source card compulsory rakho." },
+    ],
+    requiredChecks: [...HINGLISH_SCRIPT_QUALITY_CHECKS],
+    safeClosingLine: "Yeh general research context hai, personal medical advice nahi. Full source aur limitations description mein review karo.",
+  };
 }
