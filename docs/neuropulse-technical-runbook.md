@@ -4,7 +4,7 @@
 **Workspace:** `neuroscience-content-workspace`  
 **Primary owner:** Balaji Rajput  
 **Prepared by:** Manus AI  
-**Status date:** 14 August 2026  
+**Status date:** 17 August 2026  
 **Production dashboard:** [https://neurospace-2rkbkju3.manus.space](https://neurospace-2rkbkju3.manus.space)
 
 > **Non-negotiable operating rule:** NeuroPulse may automatically collect research candidates and calculate editorial readiness. It must **never** automatically upload, submit, publish, post, schedule a public post, or otherwise distribute content to YouTube, Instagram, Facebook, or any other public platform. A separate, immediate owner confirmation is required for each public submission.
@@ -60,7 +60,7 @@ The core implementation is in [`server/automation.ts`](../server/automation.ts).
 ```text
 GET https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi
     db=pubmed
-    term=neuroscience[Title/Abstract]
+    term=(neuroscience[Title/Abstract] OR psychology[Title/Abstract])
     sort=pub+date
     datetype=pdat
     reldate=7
@@ -93,11 +93,12 @@ The production query purposefully has a small retrieval cap (`retmax=5`) and sea
 | Condition | Required value |
 |---|---|
 | Number of linked reels | Exactly 7 |
-| Source record | `sourceCited === true` |
+| Source record | `sourceCited === true` and `sourcePackStatus === "complete"` |
 | Limitation disclosure | `limitationLinePresent === true` |
 | Medical-safety disclosure | `notMedicalAdvice === true` |
 | Background music | `bgmStatus === "ready"` |
 | Voice | `voiceStatus === "ready"` |
+| Health-review status | `healthRedFlagsCleared === true` |
 
 When all seven items are ready, the bundle receives `ready_to_compile`. Otherwise it remains `collecting`, and the run is recorded as `blocked`. In both cases the returned run summary explicitly states that no external publication was created.
 
@@ -159,6 +160,10 @@ The schema lives in [`drizzle/schema.ts`](../drizzle/schema.ts). The tables belo
 | `automation_runs` | Immutable-style operational history per job execution. | trigger type, status, start/finish, summary, candidate count. |
 
 The unique index on `(ownerId, jobType)` ensures that an owner has one durable daily job record and one weekly job record. The code saves the scheduler’s returned task identifier in `automation_jobs.scheduleCronTaskUid`; later callbacks resolve work only by that identifier.
+
+### 6.1 Additional persisted private controls
+
+The continuation adds `study_candidates` editorial fields for category, source URL, population context, review risk, cross-validation status, owner review, and editorial flags. `reel_drafts` now contains the private source-pack payload, source-pack status, and health-red-flag clearance. `automation_runs` records the source system and next owner action. `service_integrations` records verified capability only; its public-submission flag is false for every service.
 
 ## 7. Full implementation map
 
@@ -267,6 +272,20 @@ The table lists outstanding constraints honestly. These are external-account, se
 
 Google documents **API Keys Admin** (`roles/serviceusage.apiKeysAdmin`) as a role required to manage API keys; API keys should also be restricted to intended services. [2] Meta documents that some business portfolios require two-factor authentication and that, in some cases, the requirement cannot be disabled. [3]
 
+## 10.1 Continued private-workflow update — 17 August 2026
+
+The workflow was extended without connecting new external accounts, creating media, or adding a public-submission path. PubMed intake now searches both **Neuroscience** and **Psychology** title/abstract records. A lightweight title classifier routes behavioural, cognitive, psychological, emotion, or wellbeing research into the Psychology review track; all remaining intake stays in the Neuroscience track. Diet and Mental Health continue to require high-scrutiny editorial handling when added manually.
+
+| Addition | Implemented behavior | Safety boundary |
+|---|---|---|
+| Private service ledger | The dashboard creates owner-scoped status rows for NeuroPulse, Google Workspace, GitHub, Gemini Spark, Instagram, Antigravity CLI, Julius, YouTube, Meta, and AI Studio. | Every row records `publicSubmissionAllowed = false`; it is an audit ledger, not a publishing connector. |
+| Schedule control | The owner may pause or resume an already bound private Heartbeat job from the dashboard. | Pause/resume only affects daily intake or weekly readiness; it cannot enable public delivery. |
+| Run ledger | Each private run records its source system and next owner action. | It retains operational context only; no action is dispatched outside the workspace. |
+| Draft source pack | A draft may carry primary-source URL, population context, cross-validation state, limitation notes, Hinglish safety guidance, and health-red-flag list. | Owner approval is blocked unless the source pack is complete and health red flags are cleared. |
+| Research triage | The dashboard exposes counts for evidence review, cross-check pending, high-scrutiny subjects, and source-ready candidates. | The counts prioritize private editorial review and do not score content for public release. |
+
+The review screen requires an authenticated owner session. An unauthenticated visitor sees only the secure sign-in page; run history, integration status, source packs, and schedule controls are not exposed.
+
 ## 11. Safe automation-extension guide
 
 Future improvements may automate **private preparation** but must preserve the owner-confirmed public-distribution gate. Use the following decision table before adding any scheduled task.
@@ -336,6 +355,10 @@ Validation completed to date includes owner-role constraints, durable job record
 | Weekly readiness behavior | Designed to set private readiness only; no video compile/publish function exists. |
 | Owner approval behavior | Requires completion checks, writes only internal approval/content-log state. |
 | Auto-publish checks | Zero enabled automatic public-publishing jobs or routes. |
+
+### 13.1 Continuation validation
+
+At the 17 August 2026 continuation checkpoint, the test suite reported **15 passing assertions**. Coverage includes cron definition, Psychology category routing, owner-only approval, source-pack completion, and health-red-flag clearance. TypeScript completed with no errors. The unauthenticated preview was checked and correctly showed only a secure sign-in screen.
 
 ## 14. Operational conclusion
 
