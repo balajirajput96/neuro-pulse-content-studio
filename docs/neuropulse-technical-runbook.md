@@ -358,7 +358,7 @@ Validation completed to date includes owner-role constraints, durable job record
 
 ### 13.1 Continuation validation
 
-At the 17 August 2026 continuation checkpoint, the test suite reported **15 passing assertions**. Coverage includes cron definition, Psychology category routing, owner-only approval, source-pack completion, and health-red-flag clearance. TypeScript completed with no errors. The unauthenticated preview was checked and correctly showed only a secure sign-in screen.
+At the 17 August 2026 continuation checkpoint, the test suite reported **15 passing assertions**. Coverage includes cron definition, Psychology category routing, owner-only approval, source-pack completion, and health-red-flag clearance. TypeScript completed with no errors. The unauthenticated preview was checked and correctly showed only a secure sign-in screen. The private daily Heartbeat execution log also showed five consecutive successful runs from 13–17 August 2026, each returning HTTP 200 without retry.
 
 ## 14. Operational conclusion
 
