@@ -363,8 +363,12 @@ Validation completed to date includes owner-role constraints, durable job record
 | Auto-publish checks | Zero enabled automatic public-publishing jobs or routes. |
 
 ### 13.1 Continuation validation
+At the 17 August 2026 continuation checkpoint, the test suite reported **15 passing assertions**. Coverage includes cron definition, Psychology category routing, owner-only approval, source-pack completion, and health-red-flag clearance. TypeScript completed with no errors. The unauthenticated preview was checked and correctly showed only a secure sign-in screen. The private daily Heartbeat execution log also showed five consecutive successful runs from 13–17 August 2026, each returning HTTP 200
+ without retry. The private weekly readiness task also had a successful HTTP 200 execution; as designed, it updated only internal weekly-bundle readiness and did not create a compilation upload or public post.
 
-At the 17 August 2026 continuation checkpoint, the test suite reported **15 passing assertions**. Coverage includes cron definition, Psychology category routing, owner-only approval, source-pack completion, and health-red-flag clearance. TypeScript completed with no errors. The unauthenticated preview was checked and correctly showed only a secure sign-in screen. The private daily Heartbeat execution log also showed five consecutive successful runs from 13–17 August 2026, each returning HTTP 200 without retry. The private weekly readiness task also had a successful HTTP 200 execution; as designed, it updated only internal weekly-bundle readiness and did not create a compilation upload or public post.
+### 13.2 Current operating status — 17 August 2026
+
+The durable job bindings remain enabled: daily private research runs at `0 30 3 * * *` UTC and weekly internal readiness runs at `0 30 4 * * 0` UTC. The latest daily record succeeded on 17 August and added one private candidate. The newly deployed Europe PMC supplementary intake will participate on the next daily execution; it retains PubMed-first processing, de-duplication, and owner review. The only initialized reel draft remains **blocked** because its creator-authorized voice input is not available. No voice cloning, media creation, compilation upload, or public posting was initiated.
 
 ## 14. Operational conclusion
 
