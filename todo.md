@@ -121,5 +121,5 @@
 - [x] Update the project pnpm runtime pin to the validated 10.34.4 toolchain so workspace-level overrides and patches are actually applied.
 - [x] Ensure the default project pnpm command resolves to 10.34.4 and applies workspace overrides and patches without the temporary `npx` invocation.
 - [x] Re-run install, audit, typecheck, tests, and build using the default project pnpm command path after the toolchain resolution fix.
-- [ ] Commit the final documentation and TODO completion state, then fast-forward it to the dedicated private GitHub main branch without rebase or force-push.
-- [ ] Verify the final synchronization by confirming a clean working tree and identical local and `github/main` commit SHAs.
+- [x] Commit the final documentation and TODO completion state, then fast-forward it to the dedicated private GitHub main branch without rebase or force-push.
+- [x] Verify the final synchronization by confirming a clean working tree and identical local and `github/main` commit SHAs.
