@@ -13,6 +13,7 @@
 | Development runtime | Pass | The development server restarted successfully and `GET /` returned HTTP 200. |
 | Fresh server diagnostics | Pass | No post-fix missing-export, syntax, or `study_candidates` database failures were found. |
 | Production dependency audit | Pass | `pnpm audit --prod --json` reports 0 low, 0 moderate, 0 high, and 0 critical findings after targeted compatible upgrades and overrides. |
+| Full dependency audit | Pass | `pnpm audit --json` reports 0 low, 0 moderate, 0 high, and 0 critical findings after validated development-tooling remediation. |
 
 The build emits a non-blocking advisory because a minified client chunk exceeds 500 kB. This does not prevent the application from building or serving; it is recorded as a later performance optimization, not a functional defect.
 

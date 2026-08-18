@@ -11,7 +11,7 @@
 | After direct compatible upgrades | 7 | 30 | 4 | 0 |
 | Final production audit | **0** | **0** | **0** | **0** |
 
-The final command `pnpm audit --prod --json` reports zero known production dependency vulnerabilities across 517 resolved production packages.
+The final command `pnpm audit --prod --json` reports zero known production dependency vulnerabilities across 517 resolved production packages. The final full `pnpm audit --json` also reports zero known low, moderate, high, or critical findings across the complete resolved dependency graph.
 
 ## Remediation Applied
 
@@ -20,6 +20,7 @@ The final command `pnpm audit --prod --json` reports zero known production depen
 | Direct SDK and HTTP client updates | `@aws-sdk/client-s3`, `@aws-sdk/s3-request-presigner`, `axios`, `drizzle-orm`, `nanoid` | Removed the initial critical `fast-xml-parser` path and related direct advisories. |
 | Server and RPC updates | `express` 4.22.2; `@trpc/client`, `@trpc/react-query`, `@trpc/server` 11.8.0 | Removed high-severity route and tRPC advisory paths without a major Express migration. |
 | Compatible transitive overrides | `path-to-regexp`, `lodash`, `lodash-es`, `dompurify`, `mermaid`, `mdast-util-to-hast`, `uuid` | Resolved the remaining known production audit findings while retaining the existing public APIs used by the application. |
+| Development tooling updates and overrides | `vitest`, `vite`, `pnpm`, `postcss`, `drizzle-kit`, `tar`, `esbuild`, `@babel/core` | Resolved critical and high development-tooling advisories, then removed the remaining low and moderate findings with validated compatible updates. |
 
 ## Validation After Upgrades
 
@@ -31,6 +32,7 @@ The final command `pnpm audit --prod --json` reports zero known production depen
 | Development server restart | Passed; dependencies re-optimized successfully. |
 | `GET /` | Returned HTTP 200. |
 | `pnpm audit --prod --json` | Passed with zero low, moderate, high, or critical findings. |
+| `pnpm audit --json` | Passed with zero low, moderate, high, or critical findings across production and development tooling. |
 
 > The remediation did not change the publishing model. Daily intake and weekly readiness remain private, and all external posting remains owner-confirmed manually.
 
