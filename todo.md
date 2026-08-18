@@ -123,3 +123,8 @@
 - [x] Re-run install, audit, typecheck, tests, and build using the default project pnpm command path after the toolchain resolution fix.
 - [x] Commit the final documentation and TODO completion state, then fast-forward it to the dedicated private GitHub main branch without rebase or force-push.
 - [x] Verify the final synchronization by confirming a clean working tree and identical local and `github/main` commit SHAs.
+- [x] Re-audit current code, package scripts, test coverage, runtime logs, private schedules, GitHub branch state, and available integration capabilities for newly verifiable defects.
+- [x] Repair and regression-test every newly verified actionable defect while preserving owner-only approvals and manual-only public publishing. No newly reproducible actionable defect was found.
+- [x] Revalidate all runnable application paths with the default pnpm toolchain and record the clean or blocked result.
+- [ ] Reconcile the verified private GitHub main branch only when a fast-forward-safe path exists; do not rebase or rewrite unrelated history.
+- [x] Keep repository visibility unchanged unless the owner separately confirms the intended public-visibility change immediately before it is made.
