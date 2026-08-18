@@ -33,3 +33,7 @@ The final command `pnpm audit --prod --json` reports zero known production depen
 | `pnpm audit --prod --json` | Passed with zero low, moderate, high, or critical findings. |
 
 > The remediation did not change the publishing model. Daily intake and weekly readiness remain private, and all external posting remains owner-confirmed manually.
+
+## GitHub Security Dashboard Reconciliation
+
+The dedicated private GitHub branch was verified at the same commit as the local workspace after the security checkpoint. The GitHub notification printed during `git push` still referenced an earlier Dependabot count. The connected integration can synchronize source and read repository files, but its Dependabot-alert endpoint returns HTTP 403. The current reconciliation status is therefore **access-limited**, not a verified unresolved dependency finding: the committed manifest and lockfile produce a zero-vulnerability production audit locally, while the remote dashboard cannot be queried by this integration. A user with GitHub Dependabot alert access can verify the dashboard’s next scan without changing application code.

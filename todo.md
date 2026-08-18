@@ -103,3 +103,4 @@
 - [x] After the closure review, refresh stabilization documentation to state the final GitHub synchronization and the only remaining owner/provider blockers.
 - [x] Replace duplicated dashboard and weekly automation readiness predicates with the shared editorial readiness contract and add regression coverage.
 - [x] Audit GitHub dependency-security findings, identify direct versus transitive exposure, and apply validated compatible remediation; final production audit reports zero known vulnerabilities.
+- [x] Reconcile GitHub Dependabot alert status with the synchronized lockfile and document the access-limited outcome: local production audit is clean, while the connected integration lacks permission to inspect or dismiss remote Dependabot alerts; documentation re-read verified.

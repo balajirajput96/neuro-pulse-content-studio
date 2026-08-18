@@ -44,7 +44,7 @@ The browser log retains earlier failure entries for a missing `setAutomationJobE
 
 The prior repository audit confirmed that `balajirajput96/B` and other potentially related repositories do not share a compatible source-tree ancestry with this React, TypeScript, Express, and Drizzle application. Therefore, no unsafe rebase, remote replacement, force-push, or shared-history rewrite was attempted.
 
-On 18 August 2026, a dedicated private repository was created and synchronized: [`balajirajput96/neuro-pulse-content-studio`](https://github.com/balajirajput96/neuro-pulse-content-studio). The workspace branch `main` now tracks `github/main`, and the pushed remote commit is `9e41a922c2c5a1a225aef8cfb9a5ae30659f3d42`.
+On 18 August 2026, a dedicated private repository was created and synchronized: [`balajirajput96/neuro-pulse-content-studio`](https://github.com/balajirajput96/neuro-pulse-content-studio). The workspace branch `main` now tracks `github/main`; the latest verified local and remote commit is `93daef7486379cdf3ce95268253a36917ae7aa56`.
 
 | Synchronization control | Verified outcome |
 |---|---|
@@ -55,6 +55,10 @@ On 18 August 2026, a dedicated private repository was created and synchronized: 
 | Credentials and raw media | Not committed as part of this source sync. |
 
 Future reviewed code changes can be pushed to the dedicated `github` remote. A rebase remains unnecessary unless a future branch is proven to share ancestry with this repository.
+
+### GitHub Alert Reconciliation
+
+The synchronized `package.json` and `pnpm-lock.yaml` were verified on the private `main` branch. The local production audit reports zero known low, moderate, high, or critical vulnerabilities. The connected GitHub token cannot read Dependabot alert details; GitHub returned HTTP 403, **“Resource not accessible by integration,”** for the Dependabot alerts endpoint. Therefore, the alert count reported at push time cannot be classified as confirmed unresolved code exposure from this integration. If the private GitHub Security dashboard continues to display the earlier count after its next scan, the owner should review it there with a token or role that includes Dependabot alert access; no alert is dismissed or ignored by this workspace.
 
 ## Safety Invariants Rechecked
 
