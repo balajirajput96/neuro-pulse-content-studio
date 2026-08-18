@@ -130,3 +130,4 @@
 - [x] Keep repository visibility unchanged unless the owner separately confirms the intended public-visibility change immediately before it is made.
 - [x] Investigate and restore the current audit-record state after the checklist unexpectedly reverted to its earlier shortened form, without discarding verified source changes.
 - [x] Change the owner-confirmed `balajirajput96/neuro-pulse-content-studio` repository from private to public, verify the public state, and document that social publishing remains manual-only.
+- [x] Recover the development server after the managed-remote restoration, then revalidate HTTP runtime health and current diagnostics.
