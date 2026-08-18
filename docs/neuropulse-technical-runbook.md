@@ -358,6 +358,7 @@ Validation includes owner-role constraints, durable job records, task-UID bindin
 | TypeScript and language-server checks | `pnpm check` completed with no errors on 18 August 2026. |
 | Full unit suite | `pnpm test` completed with 6 files and 22 tests passing on 18 August 2026. |
 | Production build | `pnpm build` completed successfully on 18 August 2026. |
+| Production dependency audit | `pnpm audit --prod --json` completed with zero known low, moderate, high, or critical findings after validated compatible dependency remediation. |
 | Daily intake action | Five scheduled daily runs from 13–17 August returned HTTP 200, each recording private research candidates without external posting. |
 | Weekly readiness behavior | The enabled weekly job writes private readiness only; every draft now requires a complete source pack and cleared health red flags in addition to citation, limitation, disclosure, voice, and BGM checks. |
 | Owner approval behavior | Requires completion checks, writes only internal approval/content-log state. |
