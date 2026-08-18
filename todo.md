@@ -109,3 +109,15 @@
 - [x] Perform a read-only audit of current browser and configured integration login status; document available access without extracting credentials, cookies, tokens, or OTPs.
 - [x] Checkpoint the verified handoff documentation and fast-forward the dedicated private GitHub branch without rebasing unrelated history. Documentation, source archive, checkpoint, and remote branch verification passed.
 - [x] Add a sanitized terminal-command ledger with exact non-secret commands and observed outcomes from the implementation, validation, security, and GitHub synchronization work.
+- [x] Re-audit all project code, package scripts, test coverage, runtime logs, private schedules, GitHub branch state, and available connector status for newly verifiable defects.
+- [x] Repair and regression-test every verified application defect found in the comprehensive audit while retaining owner-only manual publishing.
+- [ ] Revalidate the application and synchronize only the verified main branch to the dedicated private GitHub repository without rebasing unrelated history.
+- [x] Move ignored pnpm override and patched-dependency configuration to the supported workspace-level location, then revalidate the resolved dependency graph and security audit.
+- [x] Add the required root package declaration to pnpm workspace configuration and retry dependency resolution after the failed migration install.
+- [x] Assess and resolve the Vite 7 peer-compatibility warning for the development JSX-location plugin without destabilizing the build.
+- [x] Assess the ignored esbuild build-script warning and verify production build/runtime remain safe under the sandbox package policy.
+- [x] Remediate the newly surfaced moderate and low esbuild dependency findings after workspace-config migration, then rerun the full audit.
+- [x] Update the stale baseline-browser-mapping development data advisory and verify the post-restart runtime log is clean.
+- [x] Update the project pnpm runtime pin to the validated 10.34.4 toolchain so workspace-level overrides and patches are actually applied.
+- [x] Ensure the default project pnpm command resolves to 10.34.4 and applies workspace overrides and patches without the temporary `npx` invocation.
+- [x] Re-run install, audit, typecheck, tests, and build using the default project pnpm command path after the toolchain resolution fix.
