@@ -82,3 +82,10 @@
 - [x] Produce a reproducible private audio-quality artifact that explicitly assesses single-speaker continuity and music/background-noise contamination for the creator-authorized source.
 - [ ] If the Instagram source remains unsuitable, obtain a clean 60–90 second creator-authorized recording and evaluate it through the same private readiness flow.
 - [x] Inspect up to three additional creator-owned original-audio Instagram reels for a verifiable clean 60–90 second narration candidate without enabling voice generation.
+- [x] Audit repository branch/remotes, current diff, package scripts, server logs, browser-console errors, typecheck, and full test suite before any GitHub synchronization action.
+- [x] Fix all verified code, migration, and runtime-contract defects discovered in the audit; retain no-publication safeguards. The weekly readiness gate was corrected to require a complete source pack and cleared health red flags; historic module/database log entries were classified and documented.
+- [x] Re-run full validation and record clean build/test/runtime evidence. Final post-fix evidence is captured in item 91.
+- [x] Review the GitHub rebase/synchronization path without force-pushing or rewriting shared history until the target branch and conflict-free plan are verified. Deferred because no compatible GitHub source ancestor was found.
+- [x] Require complete source packs and cleared health red flags in weekly-compilation readiness before a bundle can be marked ready.
+- [x] Add regression coverage for incomplete source packs and uncleared health flags in weekly-compilation readiness.
+- [x] Re-run TypeScript, tests, production build, and runtime checks after the weekly readiness fix; update the stabilization record.

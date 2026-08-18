@@ -1,5 +1,20 @@
 import { describe, expect, it } from "vitest";
-import { AUTOMATION_CRONS, inferEditorialCategory } from "./automation";
+import {
+  AUTOMATION_CRONS,
+  inferEditorialCategory,
+  isDraftReadyForWeeklyCompilation,
+  type WeeklyCompilationDraftReadiness,
+} from "./automation";
+
+const weeklyReadyDraft: WeeklyCompilationDraftReadiness = {
+  sourceCited: true,
+  limitationLinePresent: true,
+  notMedicalAdvice: true,
+  sourcePackStatus: "complete",
+  healthRedFlagsCleared: true,
+  bgmStatus: "ready",
+  voiceStatus: "ready",
+};
 
 describe("free content automation schedule", () => {
   it("defines only the daily intake and weekly preparation jobs", () => {
@@ -21,5 +36,20 @@ describe("free content automation schedule", () => {
   it("keeps the secondary literature discovery inside the existing private daily job", () => {
     expect(Object.keys(AUTOMATION_CRONS)).toContain("daily_research");
     expect(Object.keys(AUTOMATION_CRONS)).not.toContain("public_publish");
+  });
+
+  it("requires a complete source pack before a draft can count toward weekly readiness", () => {
+    expect(isDraftReadyForWeeklyCompilation(weeklyReadyDraft)).toBe(true);
+    expect(isDraftReadyForWeeklyCompilation({
+      ...weeklyReadyDraft,
+      sourcePackStatus: "needs_review",
+    })).toBe(false);
+  });
+
+  it("requires cleared health red flags before a draft can count toward weekly readiness", () => {
+    expect(isDraftReadyForWeeklyCompilation({
+      ...weeklyReadyDraft,
+      healthRedFlagsCleared: false,
+    })).toBe(false);
   });
 });

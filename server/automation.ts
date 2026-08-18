@@ -26,6 +26,27 @@ export function inferEditorialCategory(title: string): "neuroscience" | "psychol
     : "neuroscience";
 }
 
+export type WeeklyCompilationDraftReadiness = Pick<
+  typeof reelDrafts.$inferSelect,
+  | "sourceCited"
+  | "limitationLinePresent"
+  | "notMedicalAdvice"
+  | "bgmStatus"
+  | "voiceStatus"
+  | "sourcePackStatus"
+  | "healthRedFlagsCleared"
+>;
+
+export function isDraftReadyForWeeklyCompilation(draft: WeeklyCompilationDraftReadiness) {
+  return draft.sourceCited
+    && draft.limitationLinePresent
+    && draft.notMedicalAdvice
+    && draft.sourcePackStatus === "complete"
+    && draft.healthRedFlagsCleared
+    && draft.bgmStatus === "ready"
+    && draft.voiceStatus === "ready";
+}
+
 type PubMedRecord = {
   uid: string;
   title?: string;
@@ -295,7 +316,7 @@ async function runWeeklyCompilation(job: typeof automationJobs.$inferSelect, tri
     const links = await db.select().from(weeklyBundleReels).where(eq(weeklyBundleReels.bundleId, bundle.id));
     const draftIds = links.map(link => link.reelDraftId);
     const drafts = draftIds.length ? await db.select().from(reelDrafts).where(inArray(reelDrafts.id, draftIds)) : [];
-    const ready = drafts.filter(draft => draft.sourceCited && draft.limitationLinePresent && draft.notMedicalAdvice && draft.bgmStatus === "ready" && draft.voiceStatus === "ready").length;
+    const ready = drafts.filter(isDraftReadyForWeeklyCompilation).length;
     const isReady = links.length === 7 && ready === 7;
     await db.update(weeklyBundles).set({ status: isReady ? "ready_to_compile" : "collecting" }).where(eq(weeklyBundles.id, bundle.id));
     const summary = isReady
