@@ -89,3 +89,9 @@
 - [x] Require complete source packs and cleared health red flags in weekly-compilation readiness before a bundle can be marked ready.
 - [x] Add regression coverage for incomplete source packs and uncleared health flags in weekly-compilation readiness.
 - [x] Re-run TypeScript, tests, production build, and runtime checks after the weekly readiness fix; update the stabilization record.
+- [ ] Re-audit every remaining actionable code, schedule, integration, and workflow item before any GitHub synchronization action.
+- [ ] Implement and validate every safely actionable remaining reliability improvement while preserving manual-only public publishing.
+- [ ] Re-document only owner-dependent external blockers and prepare a non-destructive GitHub synchronization plan after all actionable work is complete.
+- [x] Align the owner approval dialog with source-pack completion and health-red-flag clearance requirements enforced by the backend.
+- [x] Refresh the technical runbook with current schedule evidence, 19-test validation results, and the repaired weekly readiness contract.
+- [ ] Create a dedicated private GitHub repository for the verified NeuroPulse workspace and push current `main` without rebasing or force-pushing unrelated history.

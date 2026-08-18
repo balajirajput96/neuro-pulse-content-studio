@@ -351,22 +351,24 @@ The dashboard’s Free Periodic Workflow section shows current job configuration
 
 ## 13. Validation record
 
-Validation completed to date includes owner-role constraints, durable job records, task-UID bindings, a production daily scheduled run, manual daily runs, and tests that verify the two allowed job types and six-field UTC expressions. The persistent schedule query performed for this runbook confirmed two enabled jobs with task bindings; the daily job had a successful run record, while the Sunday readiness job had not yet reached its first scheduled time.
+Validation includes owner-role constraints, durable job records, task-UID bindings, production scheduled runs, and tests that verify the two allowed job types, their six-field UTC expressions, manual-only publication boundaries, and weekly compilation safeguards. The current persistent schedule query confirms two enabled jobs with stored task bindings and future execution times.
 
 | Validation item | Result |
 |---|---|
-| TypeScript and language-server checks | No reported type errors at the documented project state. |
-| Automation tests | Cron test verifies exactly two intended workflows and their exact six-field expressions. |
-| Daily intake action | Ran successfully and recorded candidates/history without external posting. |
-| Weekly readiness behavior | Designed to set private readiness only; no video compile/publish function exists. |
+| TypeScript and language-server checks | `pnpm check` completed with no errors on 18 August 2026. |
+| Full unit suite | `pnpm test` completed with 5 files and 19 tests passing on 18 August 2026. |
+| Production build | `pnpm build` completed successfully on 18 August 2026. |
+| Daily intake action | Five scheduled daily runs from 13–17 August returned HTTP 200, each recording private research candidates without external posting. |
+| Weekly readiness behavior | The enabled weekly job writes private readiness only; every draft now requires a complete source pack and cleared health red flags in addition to citation, limitation, disclosure, voice, and BGM checks. |
 | Owner approval behavior | Requires completion checks, writes only internal approval/content-log state. |
 | Auto-publish checks | Zero enabled automatic public-publishing jobs or routes. |
 
-### 13.1 Continuation validation
-At the 17 August 2026 continuation checkpoint, the test suite reported **15 passing assertions**. Coverage includes cron definition, Psychology category routing, owner-only approval, source-pack completion, and health-red-flag clearance. TypeScript completed with no errors. The unauthenticated preview was checked and correctly showed only a secure sign-in screen. The private daily Heartbeat execution log also showed five consecutive successful runs from 13–17 August 2026, each returning HTTP 200
- without retry. The private weekly readiness task also had a successful HTTP 200 execution; as designed, it updated only internal weekly-bundle readiness and did not create a compilation upload or public post.
+### 13.1 Current validation — 18 August 2026
+The full test suite reports **19 passing tests across 5 files**. Coverage includes cron definitions, Psychology category routing, owner-only approval, source-pack completion, health-red-flag clearance, and two focused regression checks that prevent a draft with an incomplete source pack or uncleared health flag from counting toward weekly readiness. TypeScript and the production build completed without errors. The unauthenticated preview correctly shows only a secure sign-in screen.
 
-### 13.2 Current operating status — 17 August 2026
+The private daily Heartbeat log shows five consecutive successful runs from 13–17 August 2026, each returning HTTP 200 without retry. The private weekly readiness task also returned HTTP 200; as designed, it updated only internal weekly-bundle readiness and did not create a compilation upload or public post. Both job definitions remain enabled. The next daily execution is scheduled for 18 August 2026 at 03:30 UTC, and the next weekly readiness execution is scheduled for 23 August 2026 at 04:30 UTC.
+
+### 13.2 Current operating status — 18 August 2026
 
 The durable job bindings remain enabled: daily private research runs at `0 30 3 * * *` UTC and weekly internal readiness runs at `0 30 4 * * 0` UTC. The latest daily record succeeded on 17 August and added one private candidate. The newly deployed Europe PMC supplementary intake will participate on the next daily execution; it retains PubMed-first processing, de-duplication, and owner review. The only initialized reel draft remains **blocked** because its creator-authorized voice input is not available. No voice cloning, media creation, compilation upload, or public posting was initiated.
 
