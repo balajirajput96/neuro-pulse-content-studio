@@ -59,7 +59,7 @@ The browser log retains earlier failure entries for a missing `setAutomationJobE
 
 The prior repository audit confirmed that `balajirajput96/B` and other potentially related repositories do not share a compatible source-tree ancestry with this React, TypeScript, Express, and Drizzle application. Therefore, no unsafe rebase, remote replacement, force-push, or shared-history rewrite was attempted.
 
-On 18 August 2026, a dedicated repository was created and synchronized: [`balajirajput96/neuro-pulse-content-studio`](https://github.com/balajirajput96/neuro-pulse-content-studio). The workspace branch `main` tracks `github/main`; the latest verified managed-project checkpoint is `59df8ad35bb78486fdf79ca8cc589f885d8069d7`.
+On 18 August 2026, a dedicated repository was created and synchronized: [`balajirajput96/neuro-pulse-content-studio`](https://github.com/balajirajput96/neuro-pulse-content-studio). The workspace branch `main` tracks `github/main`; the CI-enabled verification checkpoint is `c75b4b51cad4efb99e4f9fcee3d31d4aa25e533a`.
 
 | Synchronization control | Verified outcome |
 |---|---|
@@ -70,6 +70,10 @@ On 18 August 2026, a dedicated repository was created and synchronized: [`balaji
 | Credentials and raw media | Not committed as part of this source sync. |
 
 Future reviewed code changes can be pushed to the dedicated `github` remote. A rebase remains unnecessary unless a future branch is proven to share ancestry with this repository.
+
+### Continuous Integration
+
+The public repository now contains a `Verify` workflow for pushes and pull requests targeting `main`. It uses Node 22 and pinned pnpm 10.34.4, installs from the lockfile, then runs the full dependency audit, TypeScript contract check, 22-test suite, and production build. Its first run on the CI-enabled checkpoint completed successfully: [run 32151921132](https://github.com/balajirajput96/neuro-pulse-content-studio/actions/runs/32151921132). The workflow observes source quality only; it does not access social-platform credentials or introduce publishing behavior.
 
 ### Public Repository Visibility
 
