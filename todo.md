@@ -111,7 +111,7 @@
 - [x] Add a sanitized terminal-command ledger with exact non-secret commands and observed outcomes from the implementation, validation, security, and GitHub synchronization work.
 - [x] Re-audit all project code, package scripts, test coverage, runtime logs, private schedules, GitHub branch state, and available connector status for newly verifiable defects.
 - [x] Repair and regression-test every verified application defect found in the comprehensive audit while retaining owner-only manual publishing.
-- [ ] Revalidate the application and synchronize only the verified main branch to the dedicated private GitHub repository without rebasing unrelated history.
+- [x] Revalidate the application and synchronize only the verified main branch to the dedicated private GitHub repository without rebasing unrelated history.
 - [x] Move ignored pnpm override and patched-dependency configuration to the supported workspace-level location, then revalidate the resolved dependency graph and security audit.
 - [x] Add the required root package declaration to pnpm workspace configuration and retry dependency resolution after the failed migration install.
 - [x] Assess and resolve the Vite 7 peer-compatibility warning for the development JSX-location plugin without destabilizing the build.
@@ -121,3 +121,5 @@
 - [x] Update the project pnpm runtime pin to the validated 10.34.4 toolchain so workspace-level overrides and patches are actually applied.
 - [x] Ensure the default project pnpm command resolves to 10.34.4 and applies workspace overrides and patches without the temporary `npx` invocation.
 - [x] Re-run install, audit, typecheck, tests, and build using the default project pnpm command path after the toolchain resolution fix.
+- [ ] Commit the final documentation and TODO completion state, then fast-forward it to the dedicated private GitHub main branch without rebase or force-push.
+- [ ] Verify the final synchronization by confirming a clean working tree and identical local and `github/main` commit SHAs.
