@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { approvalBlocker, buildEditorialFlags, buildHinglishScriptTemplate, isDraftReady, isHighScrutinyCategory, isWeeklyBundleReady, isWorkspaceOwnerRole, normalizeTopic } from "../shared/contentModels";
+import { approvalBlocker, buildEditorialFlags, buildHinglishScriptTemplate, isDraftReady, isHighScrutinyCategory, isReelDraftReady, isWeeklyBundleReady, isWorkspaceOwnerRole, normalizeTopic } from "../shared/contentModels";
 
 describe("content workflow rules", () => {
   it("normalizes topic punctuation before duplicate matching", () => {
@@ -57,6 +57,21 @@ describe("content workflow rules", () => {
     expect(isDraftReady(checklist, "ready", "ready", "complete", false)).toBe(false);
     expect(isDraftReady(checklist, "ready", "ready", "complete", true)).toBe(true);
     expect(approvalBlocker(checklist, "ready", "ready", "needs_review", true)).toContain("source-pack");
+  });
+
+  it("uses one record-level readiness contract for dashboard and weekly automation consumers", () => {
+    const readyDraft = {
+      sourceCited: true,
+      limitationLinePresent: true,
+      notMedicalAdvice: true,
+      sourcePackStatus: "complete",
+      healthRedFlagsCleared: true,
+      bgmStatus: "ready",
+      voiceStatus: "ready",
+    };
+    expect(isReelDraftReady(readyDraft)).toBe(true);
+    expect(isReelDraftReady({ ...readyDraft, sourcePackStatus: "needs_review" })).toBe(false);
+    expect(isReelDraftReady({ ...readyDraft, healthRedFlagsCleared: false })).toBe(false);
   });
 
   it("keeps Diet and Mental Health in high-scrutiny review while primary research categories remain standard", () => {

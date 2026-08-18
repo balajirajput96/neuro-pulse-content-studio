@@ -8,7 +8,7 @@
 |---|---|---|
 | TypeScript contract check | Pass | `pnpm check` completed with no diagnostics. |
 | Focused weekly readiness tests | Pass | `server/automation.test.ts`: 6 tests passing. |
-| Full unit suite | Pass | `pnpm test`: **5 files and 19 tests passing**. |
+| Full unit suite | Pass | `pnpm test`: **6 files and 22 tests passing**. |
 | Production build | Pass | `pnpm build` completed; client assets and `dist/index.js` were produced. |
 | Development runtime | Pass | The development server restarted successfully and `GET /` returned HTTP 200. |
 | Fresh server diagnostics | Pass | No post-fix missing-export, syntax, or `study_candidates` database failures were found. |
@@ -31,23 +31,29 @@ The readiness predicate is now centralized as `isDraftReadyForWeeklyCompilation(
 | Background music ready | `bgmStatus === "ready"` |
 | Voice ready | `voiceStatus === "ready"` |
 
-Two regression tests now prove that an incomplete source pack or uncleared health red flags blocks weekly readiness. The full suite passes with these additions. This repair remains entirely private: it does not create video, submit content, or publish content to any external platform.
+Two regression tests prove that an incomplete source pack or uncleared health red flags blocks weekly readiness. The same shared `isDraftReady(...)` contract now powers weekly automation and dashboard readiness, preventing future cross-layer drift. The full suite passes with these additions. This repair remains entirely private: it does not create video, submit content, or publish content to any external platform.
 
 ## Historic Diagnostics
 
-The browser log retains earlier failure entries for a missing `setAutomationJobEnabled` export and a study-candidate database query. Those events occurred before subsequent source/schema updates and server restarts. The current automation module exports `setAutomationJobEnabled`; current type checking, focused testing, full testing, production compilation, and fresh runtime diagnostics all pass.
+The browser log retains earlier failure entries for a missing `setAutomationJobEnabled` export and a study-candidate database query. Those events occurred before subsequent source/schema updates and server restarts. The current automation module exports `setAutomationJobEnabled`; current type checking, focused testing, full testing, production compilation, and fresh runtime diagnostics all pass. Scheduled-handler failures now also return the callback URL and authenticated task UID to support targeted investigation.
 
 > Historic log entries remain preserved for auditability. They are not current failures unless reproduced against the current build.
 
-## Git and GitHub Review
+## Git and GitHub Synchronization
 
-The active workspace is on local branch `main`, with `origin` pointing to the managed project remote rather than GitHub. The public GitHub repository `balajirajput96/B` contains only a README, license, and ignore file. The other potentially related repositories use incompatible Python, documentation-only, or policy/archive structures. No repository reviewed shares a compatible source-tree ancestry with this React, TypeScript, Express, and Drizzle application.
+The prior repository audit confirmed that `balajirajput96/B` and other potentially related repositories do not share a compatible source-tree ancestry with this React, TypeScript, Express, and Drizzle application. Therefore, no unsafe rebase, remote replacement, force-push, or shared-history rewrite was attempted.
 
-Therefore, **no rebase, remote replacement, force-push, or shared-history rewrite was performed**. Rebasing onto an unrelated repository would risk overwriting compatible project history and create avoidable conflicts.
+On 18 August 2026, a dedicated private repository was created and synchronized: [`balajirajput96/neuro-pulse-content-studio`](https://github.com/balajirajput96/neuro-pulse-content-studio). The workspace branch `main` now tracks `github/main`, and the pushed remote commit is `9e41a922c2c5a1a225aef8cfb9a5ae30659f3d42`.
 
-## Safe Next GitHub Action
+| Synchronization control | Verified outcome |
+|---|---|
+| Repository visibility | Private |
+| Branch synchronized | `main` → `github/main` |
+| Source history treatment | Existing workspace history preserved; no rebase or force-push used. |
+| Managed deployment remote | Preserved as `origin`; GitHub was added separately as `github`. |
+| Credentials and raw media | Not committed as part of this source sync. |
 
-To publish this exact NeuroPulse codebase to GitHub, the owner should create or explicitly designate a dedicated target repository. Once named, the safe procedure is to add it as a separate `github` remote and push the current `main` branch after checkpoint review. A rebase should only be considered if a target branch is proven to share this workspace’s ancestry.
+Future reviewed code changes can be pushed to the dedicated `github` remote. A rebase remains unnecessary unless a future branch is proven to share ancestry with this repository.
 
 ## Safety Invariants Rechecked
 

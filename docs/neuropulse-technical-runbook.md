@@ -356,7 +356,7 @@ Validation includes owner-role constraints, durable job records, task-UID bindin
 | Validation item | Result |
 |---|---|
 | TypeScript and language-server checks | `pnpm check` completed with no errors on 18 August 2026. |
-| Full unit suite | `pnpm test` completed with 5 files and 19 tests passing on 18 August 2026. |
+| Full unit suite | `pnpm test` completed with 6 files and 22 tests passing on 18 August 2026. |
 | Production build | `pnpm build` completed successfully on 18 August 2026. |
 | Daily intake action | Five scheduled daily runs from 13–17 August returned HTTP 200, each recording private research candidates without external posting. |
 | Weekly readiness behavior | The enabled weekly job writes private readiness only; every draft now requires a complete source pack and cleared health red flags in addition to citation, limitation, disclosure, voice, and BGM checks. |
@@ -364,7 +364,7 @@ Validation includes owner-role constraints, durable job records, task-UID bindin
 | Auto-publish checks | Zero enabled automatic public-publishing jobs or routes. |
 
 ### 13.1 Current validation — 18 August 2026
-The full test suite reports **19 passing tests across 5 files**. Coverage includes cron definitions, Psychology category routing, owner-only approval, source-pack completion, health-red-flag clearance, and two focused regression checks that prevent a draft with an incomplete source pack or uncleared health flag from counting toward weekly readiness. TypeScript and the production build completed without errors. The unauthenticated preview correctly shows only a secure sign-in screen.
+The full test suite reports **22 passing tests across 6 files**. Coverage includes cron definitions, Psychology category routing, owner-only approval, source-pack completion, health-red-flag clearance, shared dashboard-and-automation readiness contract behavior, two focused regression checks that prevent a draft with an incomplete source pack or uncleared health flag from counting toward weekly readiness, and cron-only/context-rich scheduled-handler failure behavior. TypeScript and the production build completed without errors. The unauthenticated preview correctly shows only a secure sign-in screen.
 
 The private daily Heartbeat log shows five consecutive successful runs from 13–17 August 2026, each returning HTTP 200 without retry. The private weekly readiness task also returned HTTP 200; as designed, it updated only internal weekly-bundle readiness and did not create a compilation upload or public post. Both job definitions remain enabled. The next daily execution is scheduled for 18 August 2026 at 03:30 UTC, and the next weekly readiness execution is scheduled for 23 August 2026 at 04:30 UTC.
 

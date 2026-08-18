@@ -8,7 +8,7 @@ import {
   weeklyBundleReels,
   weeklyBundles,
 } from "../drizzle/schema";
-import { buildEditorialFlags, normalizeTopic } from "../shared/contentModels";
+import { buildEditorialFlags, isReelDraftReady, normalizeTopic } from "../shared/contentModels";
 import { updateHeartbeatJob } from "./_core/heartbeat";
 import { getDb } from "./db";
 
@@ -38,13 +38,7 @@ export type WeeklyCompilationDraftReadiness = Pick<
 >;
 
 export function isDraftReadyForWeeklyCompilation(draft: WeeklyCompilationDraftReadiness) {
-  return draft.sourceCited
-    && draft.limitationLinePresent
-    && draft.notMedicalAdvice
-    && draft.sourcePackStatus === "complete"
-    && draft.healthRedFlagsCleared
-    && draft.bgmStatus === "ready"
-    && draft.voiceStatus === "ready";
+  return isReelDraftReady(draft);
 }
 
 type PubMedRecord = {

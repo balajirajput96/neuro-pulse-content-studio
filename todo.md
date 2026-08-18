@@ -89,9 +89,16 @@
 - [x] Require complete source packs and cleared health red flags in weekly-compilation readiness before a bundle can be marked ready.
 - [x] Add regression coverage for incomplete source packs and uncleared health flags in weekly-compilation readiness.
 - [x] Re-run TypeScript, tests, production build, and runtime checks after the weekly readiness fix; update the stabilization record.
-- [ ] Re-audit every remaining actionable code, schedule, integration, and workflow item before any GitHub synchronization action.
-- [ ] Implement and validate every safely actionable remaining reliability improvement while preserving manual-only public publishing.
-- [ ] Re-document only owner-dependent external blockers and prepare a non-destructive GitHub synchronization plan after all actionable work is complete.
+- [x] Re-audit every remaining actionable code, schedule, integration, and workflow item before any GitHub synchronization action.
+- [x] Implement and validate every safely actionable remaining reliability improvement while preserving manual-only public publishing within the documented closure-review scope.
+- [x] Re-document only owner-dependent external blockers and prepare a non-destructive GitHub synchronization plan after all actionable work is complete.
 - [x] Align the owner approval dialog with source-pack completion and health-red-flag clearance requirements enforced by the backend.
 - [x] Refresh the technical runbook with current schedule evidence, 19-test validation results, and the repaired weekly readiness contract.
-- [ ] Create a dedicated private GitHub repository for the verified NeuroPulse workspace and push current `main` without rebasing or force-pushing unrelated history.
+- [x] Create a dedicated private GitHub repository for the verified NeuroPulse workspace and push current `main` without rebasing or force-pushing unrelated history.
+- [x] Produce and complete a concrete reliability-gap checklist covering backend readiness, owner approval, schedule handlers, dashboard copy, runtime errors, and test coverage.
+- [x] Verify the GitHub synchronization record and current owner-dependent blockers in project documentation before closing the broad audit items.
+- [x] Add request URL and authenticated task UID context to scheduled-handler failure responses for actionable cron investigation logs.
+- [x] Add regression tests for cron-only access and context-rich scheduled-handler failure responses.
+- [x] Perform a closure review across current backend, UI, schedule, documentation, test, and runtime paths; resolve each new verified defect or classify it as owner/provider blocked.
+- [x] After the closure review, refresh stabilization documentation to state the final GitHub synchronization and the only remaining owner/provider blockers.
+- [x] Replace duplicated dashboard and weekly automation readiness predicates with the shared editorial readiness contract and add regression coverage.

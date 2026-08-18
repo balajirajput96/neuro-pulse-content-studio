@@ -52,6 +52,13 @@ export type ReadinessChecklist = {
   notMedicalAdvice: boolean;
 };
 
+export type ReelReadinessState = ReadinessChecklist & {
+  bgmStatus: string;
+  voiceStatus: string;
+  sourcePackStatus: string;
+  healthRedFlagsCleared: boolean;
+};
+
 export function normalizeTopic(value: string) {
   return value
     .toLowerCase()
@@ -75,6 +82,20 @@ export function isDraftReady(
     voiceStatus === "ready" &&
     sourcePackStatus === "complete" &&
     healthRedFlagsCleared
+  );
+}
+
+export function isReelDraftReady(draft: ReelReadinessState) {
+  return isDraftReady(
+    {
+      sourceCited: draft.sourceCited,
+      limitationLinePresent: draft.limitationLinePresent,
+      notMedicalAdvice: draft.notMedicalAdvice,
+    },
+    draft.bgmStatus,
+    draft.voiceStatus,
+    draft.sourcePackStatus,
+    draft.healthRedFlagsCleared,
   );
 }
 
