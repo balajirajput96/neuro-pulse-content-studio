@@ -128,3 +128,5 @@
 - [x] Revalidate all runnable application paths with the default pnpm toolchain and record the clean or blocked result.
 - [x] Reconcile the verified private GitHub main branch only when a fast-forward-safe path exists; do not rebase or rewrite unrelated history.
 - [x] Keep repository visibility unchanged unless the owner separately confirms the intended public-visibility change immediately before it is made.
+- [x] Investigate and restore the current audit-record state after the checklist unexpectedly reverted to its earlier shortened form, without discarding verified source changes.
+- [x] Change the owner-confirmed `balajirajput96/neuro-pulse-content-studio` repository from private to public, verify the public state, and document that social publishing remains manual-only.

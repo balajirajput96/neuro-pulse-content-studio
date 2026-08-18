@@ -59,11 +59,11 @@ The browser log retains earlier failure entries for a missing `setAutomationJobE
 
 The prior repository audit confirmed that `balajirajput96/B` and other potentially related repositories do not share a compatible source-tree ancestry with this React, TypeScript, Express, and Drizzle application. Therefore, no unsafe rebase, remote replacement, force-push, or shared-history rewrite was attempted.
 
-On 18 August 2026, a dedicated private repository was created and synchronized: [`balajirajput96/neuro-pulse-content-studio`](https://github.com/balajirajput96/neuro-pulse-content-studio). The workspace branch `main` now tracks `github/main`; the latest verified local and remote commit before this renewed audit documentation is `71d826a0df1974d4ac05228644d9e142da414e8f`.
+On 18 August 2026, a dedicated repository was created and synchronized: [`balajirajput96/neuro-pulse-content-studio`](https://github.com/balajirajput96/neuro-pulse-content-studio). The workspace branch `main` tracks `github/main`; the latest verified managed-project checkpoint is `59df8ad35bb78486fdf79ca8cc589f885d8069d7`.
 
 | Synchronization control | Verified outcome |
 |---|---|
-| Repository visibility | Private |
+| Repository visibility | Public, changed only after the owner's explicit confirmation on 18 August 2026. |
 | Branch synchronized | `main` → `github/main` |
 | Source history treatment | Existing workspace history preserved; no rebase or force-push used. |
 | Managed deployment remote | Preserved as `origin`; GitHub was added separately as `github`. |
@@ -71,15 +71,21 @@ On 18 August 2026, a dedicated private repository was created and synchronized: 
 
 Future reviewed code changes can be pushed to the dedicated `github` remote. A rebase remains unnecessary unless a future branch is proven to share ancestry with this repository.
 
+### Public Repository Visibility
+
+The owner explicitly confirmed the privacy-impacting change from **private** to **public** for the dedicated GitHub repository. GitHub subsequently reported `visibility: PUBLIC` and `isPrivate: false` for the repository. This action exposes the repository source and committed documentation through its GitHub URL; it does **not** create, upload, submit, or publish any YouTube, Instagram, or Facebook content. The application’s owner-only approval gates and manual-only social publishing controls remain unchanged.
+
+During the visibility-change closeout, the managed deployment remote was found five verified commits ahead of the local GitHub-tracking branch. The workspace was recovered by a normal fast-forward from that managed remote, preserving the complete verified checkpoint chain without reset, rebase, or force-push. The recovered state is ready for an ordinary fast-forward synchronization to the public GitHub `main` branch.
+
 ### Renewed Audit Evidence
 
-The renewed audit confirmed that the local `main` branch and `github/main` have the same commit, with zero commits ahead or behind and no repository integrity errors. Consequently, a rebase is neither required nor safe to perform merely for synchronization. The repository remains **private**; changing its visibility is a separate privacy-impacting action and was deliberately not performed.
+The renewed audit confirmed that the local `main` branch and `github/main` had the same commit before the visibility change, with zero commits ahead or behind and no repository integrity errors. Consequently, a rebase was neither required nor safe to perform merely for synchronization. The repository visibility was then changed to public only after explicit owner confirmation.
 
 The standard `pnpm` command resolved to 10.34.4 and completed lockfile validation, full security audit, TypeScript validation, all 22 tests, and the Vite/esbuild production build. The audit remained at zero low, moderate, high, and critical findings across 743 dependencies. The development endpoint returned HTTP 200. Earlier browser-log database-query entries were replayed against the current schema and succeeded, so they remain historic rather than reproduced defects.
 
 ### GitHub Alert Reconciliation
 
-The synchronized `package.json` and `pnpm-lock.yaml` were verified on the private `main` branch. Both the local production audit and the full dependency audit report zero known low, moderate, high, or critical vulnerabilities. The connected GitHub token cannot read Dependabot alert details; GitHub returned HTTP 403, **“Resource not accessible by integration,”** for the Dependabot alerts endpoint. Therefore, the alert count reported at push time cannot be classified as confirmed unresolved code exposure from this integration. If the private GitHub Security dashboard continues to display the earlier count after its next scan, the owner should review it there with a token or role that includes Dependabot alert access; no alert is dismissed or ignored by this workspace.
+The synchronized `package.json` and `pnpm-lock.yaml` were verified on the repository's `main` branch. Both the local production audit and the full dependency audit report zero known low, moderate, high, or critical vulnerabilities. The connected GitHub token cannot read Dependabot alert details; GitHub returned HTTP 403, **“Resource not accessible by integration,”** for the Dependabot alerts endpoint. Therefore, the alert count reported at push time cannot be classified as confirmed unresolved code exposure from this integration. If the GitHub Security dashboard continues to display the earlier count after its next scan, the owner should review it there with a token or role that includes Dependabot alert access; no alert is dismissed or ignored by this workspace.
 
 ## Schedule and Connector Re-Audit
 
