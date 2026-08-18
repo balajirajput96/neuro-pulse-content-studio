@@ -131,3 +131,4 @@
 - [x] Investigate and restore the current audit-record state after the checklist unexpectedly reverted to its earlier shortened form, without discarding verified source changes.
 - [x] Change the owner-confirmed `balajirajput96/neuro-pulse-content-studio` repository from private to public, verify the public state, and document that social publishing remains manual-only.
 - [x] Recover the development server after the managed-remote restoration, then revalidate HTTP runtime health and current diagnostics.
+- [x] Refresh the currently stale baseline-browser-mapping development metadata, restart the server, and verify the warning is absent or accurately classified. Installed mapping is 2.11.15; fresh restart returned HTTP 200 without a new mapping advisory, while retained log entries are historic.
