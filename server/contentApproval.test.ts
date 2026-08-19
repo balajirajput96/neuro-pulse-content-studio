@@ -50,7 +50,9 @@ describe("approveDraftForOwner", () => {
     const { db } = createFakeDb({ ...baseDraft, notMedicalAdvice: false });
     mocks.getDb.mockResolvedValue(db);
 
-    await expect(approveDraftForOwner(9, 18)).rejects.toThrow("This draft cannot be approved until source-pack, health-safety, and production readiness requirements are complete");
+    await expect(approveDraftForOwner(9, 18)).rejects.toThrow(
+      "This draft cannot be approved until source-pack, health-safety, and production readiness requirements are complete"
+    );
     expect(db.update).not.toHaveBeenCalled();
     expect(db.insert).not.toHaveBeenCalled();
   });
@@ -59,7 +61,9 @@ describe("approveDraftForOwner", () => {
     const { db, updateWhere, logUpsert } = createFakeDb(baseDraft);
     mocks.getDb.mockResolvedValue(db);
 
-    await expect(approveDraftForOwner(9, 18)).resolves.toEqual({ success: true });
+    await expect(approveDraftForOwner(9, 18)).resolves.toEqual({
+      success: true,
+    });
     expect(db.update).toHaveBeenCalledTimes(1);
     expect(updateWhere).toHaveBeenCalledTimes(1);
     expect(db.insert).toHaveBeenCalledTimes(1);

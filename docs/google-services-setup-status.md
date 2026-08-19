@@ -6,21 +6,21 @@
 
 ## Completed Setup
 
-| Service | Completed configuration | Current operating boundary |
-|---|---|---|
-| Google Drive | The existing `Neuroscience Reels Content` workspace now contains folders for research intake, Hinglish scripts, voice samples, visuals, draft reels, weekly compilations, publish review, and archive. | Assets remain in the owner-controlled Drive workspace; no sharing or deletion was performed. |
-| Gemini | A daily private NeuroPulse neuroscience research brief is configured. | It produces editorial material only and does not post externally. |
-| Gemini Spark | Daily research intake, daily Hinglish reel-draft preparation, and weekly compilation-readiness review have been configured and recorded. | Spark must not upload, publish, post, send, or otherwise act on YouTube, Instagram, Facebook, or another external platform. |
-| NeuroPulse dashboard | Private PubMed intake and weekly preparation schedules are enabled. | The dashboard retains owner-only manual approval and has no automatic publish route. |
+| Service              | Completed configuration                                                                                                                                                                                | Current operating boundary                                                                                                  |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| Google Drive         | The existing `Neuroscience Reels Content` workspace now contains folders for research intake, Hinglish scripts, voice samples, visuals, draft reels, weekly compilations, publish review, and archive. | Assets remain in the owner-controlled Drive workspace; no sharing or deletion was performed.                                |
+| Gemini               | A daily private NeuroPulse neuroscience research brief is configured.                                                                                                                                  | It produces editorial material only and does not post externally.                                                           |
+| Gemini Spark         | Daily research intake, daily Hinglish reel-draft preparation, and weekly compilation-readiness review have been configured and recorded.                                                               | Spark must not upload, publish, post, send, or otherwise act on YouTube, Instagram, Facebook, or another external platform. |
+| NeuroPulse dashboard | Private PubMed intake and weekly preparation schedules are enabled.                                                                                                                                    | The dashboard retains owner-only manual approval and has no automatic publish route.                                        |
 
 ## AI Studio and Google Cloud Status
 
-| Item | Observed result | Next official action |
-|---|---|---|
-| AI Studio API key in free-tier project | Google rejected automated generation with a suspicious-request error. | Create the project/key manually in a normal Google session after Google clears the restriction. Do not attempt to bypass the restriction. |
-| API key in `galvanized-future-q8kj5` | AI Studio reported that this account does not have permission to create a key in that project. | An authorized project owner must grant this account the least-privilege **API Keys Admin** role (`roles/serviceusage.apiKeysAdmin`) or create the key themselves. |
-| Project IAM view | The current account lacks `resourcemanager.projects.getIamPolicy`, so it cannot inspect or alter project IAM. | A project owner must perform the IAM grant; this account cannot self-grant access. |
-| Dedicated `NeuroPulse GenAI` project | AI Studio rejected automated project creation with a suspicious-request error. | Create it manually only after the Google restriction clears. |
+| Item                                   | Observed result                                                                                               | Next official action                                                                                                                                              |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| AI Studio API key in free-tier project | Google rejected automated generation with a suspicious-request error.                                         | Create the project/key manually in a normal Google session after Google clears the restriction. Do not attempt to bypass the restriction.                         |
+| API key in `galvanized-future-q8kj5`   | AI Studio reported that this account does not have permission to create a key in that project.                | An authorized project owner must grant this account the least-privilege **API Keys Admin** role (`roles/serviceusage.apiKeysAdmin`) or create the key themselves. |
+| Project IAM view                       | The current account lacks `resourcemanager.projects.getIamPolicy`, so it cannot inspect or alter project IAM. | A project owner must perform the IAM grant; this account cannot self-grant access.                                                                                |
+| Dedicated `NeuroPulse GenAI` project   | AI Studio rejected automated project creation with a suspicious-request error.                                | Create it manually only after the Google restriction clears.                                                                                                      |
 
 > A Gemini API key does not itself connect Gemini Spark to external services. Gemini Spark supports its own connected applications or a valid custom MCP endpoint. Any API key must be stored only in an approved secret location, never in chat, source code, or a public Drive file.
 

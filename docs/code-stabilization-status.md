@@ -4,20 +4,20 @@
 
 ## Verified Validation Results
 
-| Check | Result | Evidence |
-|---|---|---|
-| TypeScript contract check | Pass | `pnpm check` completed with no diagnostics. |
-| Focused weekly readiness tests | Pass | `server/automation.test.ts`: 6 tests passing. |
-| Full unit suite | Pass | `pnpm test`: **6 files and 22 tests passing**. |
-| Production build | Pass | `pnpm build` completed; client assets and `dist/index.js` were produced. |
-| Development runtime | Pass | The development server restarted successfully and `GET /` returned HTTP 200. |
-| Fresh server diagnostics | Pass | No post-fix missing-export, syntax, or `study_candidates` database failures were found. |
-| Production dependency audit | Pass | `pnpm audit --prod --json` reports 0 low, 0 moderate, 0 high, and 0 critical findings after targeted compatible upgrades and overrides. |
-| Full dependency audit | Pass | `pnpm audit --json` reports 0 low, 0 moderate, 0 high, and 0 critical findings after validated development-tooling remediation. |
-| PNPM workspace configuration | Pass | Overrides and patched dependencies now live in `pnpm-workspace.yaml`, and the project pin is `pnpm@10.34.4`; the prior ignored-settings warning is absent. |
-| Post-migration security audit | Pass | `npx --yes pnpm@10.34.4 audit --json` reports 0 low, 0 moderate, 0 high, and 0 critical findings across 743 resolved dependencies. |
-| Default package-manager command path | Pass | The normal project `pnpm` command now resolves to 10.34.4, applies the workspace configuration, completes install and audit cleanly, and runs typecheck, 22 tests, and the production build successfully. |
-| Private schedule audit | Pass | The daily research and weekly compilation Heartbeat jobs are enabled, POST only to authenticated private endpoints, and their latest recorded executions returned HTTP 200. |
+| Check                                | Result | Evidence                                                                                                                                                                                                  |
+| ------------------------------------ | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| TypeScript contract check            | Pass   | `pnpm check` completed with no diagnostics.                                                                                                                                                               |
+| Focused weekly readiness tests       | Pass   | `server/automation.test.ts`: 6 tests passing.                                                                                                                                                             |
+| Full unit suite                      | Pass   | `pnpm test`: **6 files and 22 tests passing**.                                                                                                                                                            |
+| Production build                     | Pass   | `pnpm build` completed; client assets and `dist/index.js` were produced.                                                                                                                                  |
+| Development runtime                  | Pass   | The development server restarted successfully and `GET /` returned HTTP 200.                                                                                                                              |
+| Fresh server diagnostics             | Pass   | No post-fix missing-export, syntax, or `study_candidates` database failures were found.                                                                                                                   |
+| Production dependency audit          | Pass   | `pnpm audit --prod --json` reports 0 low, 0 moderate, 0 high, and 0 critical findings after targeted compatible upgrades and overrides.                                                                   |
+| Full dependency audit                | Pass   | `pnpm audit --json` reports 0 low, 0 moderate, 0 high, and 0 critical findings after validated development-tooling remediation.                                                                           |
+| PNPM workspace configuration         | Pass   | Overrides and patched dependencies now live in `pnpm-workspace.yaml`, and the project pin is `pnpm@10.34.4`; the prior ignored-settings warning is absent.                                                |
+| Post-migration security audit        | Pass   | `npx --yes pnpm@10.34.4 audit --json` reports 0 low, 0 moderate, 0 high, and 0 critical findings across 743 resolved dependencies.                                                                        |
+| Default package-manager command path | Pass   | The normal project `pnpm` command now resolves to 10.34.4, applies the workspace configuration, completes install and audit cleanly, and runs typecheck, 22 tests, and the production build successfully. |
+| Private schedule audit               | Pass   | The daily research and weekly compilation Heartbeat jobs are enabled, POST only to authenticated private endpoints, and their latest recorded executions returned HTTP 200.                               |
 
 The build emits a non-blocking advisory because a minified client chunk exceeds 500 kB. This does not prevent the application from building or serving; it is recorded as a later performance optimization, not a functional defect.
 
@@ -37,15 +37,15 @@ The audit identified a real contract gap in weekly compilation readiness. Previo
 
 The readiness predicate is now centralized as `isDraftReadyForWeeklyCompilation()` in `server/automation.ts`. A draft only counts toward a seven-reel weekly bundle when all of the following conditions are true:
 
-| Required condition | Enforced value |
-|---|---|
-| Citation included | `sourceCited === true` |
-| Limitation line included | `limitationLinePresent === true` |
-| Non-medical-advice disclosure included | `notMedicalAdvice === true` |
-| Source pack complete | `sourcePackStatus === "complete"` |
-| Health red flags cleared | `healthRedFlagsCleared === true` |
-| Background music ready | `bgmStatus === "ready"` |
-| Voice ready | `voiceStatus === "ready"` |
+| Required condition                     | Enforced value                    |
+| -------------------------------------- | --------------------------------- |
+| Citation included                      | `sourceCited === true`            |
+| Limitation line included               | `limitationLinePresent === true`  |
+| Non-medical-advice disclosure included | `notMedicalAdvice === true`       |
+| Source pack complete                   | `sourcePackStatus === "complete"` |
+| Health red flags cleared               | `healthRedFlagsCleared === true`  |
+| Background music ready                 | `bgmStatus === "ready"`           |
+| Voice ready                            | `voiceStatus === "ready"`         |
 
 Two regression tests prove that an incomplete source pack or uncleared health red flags blocks weekly readiness. The same shared `isDraftReady(...)` contract now powers weekly automation and dashboard readiness, preventing future cross-layer drift. The full suite passes with these additions. This repair remains entirely private: it does not create video, submit content, or publish content to any external platform.
 
@@ -61,13 +61,13 @@ The prior repository audit confirmed that `balajirajput96/B` and other potential
 
 On 18 August 2026, a dedicated repository was created and synchronized: [`balajirajput96/neuro-pulse-content-studio`](https://github.com/balajirajput96/neuro-pulse-content-studio). The workspace branch `main` tracks `github/main`; the CI-enabled verification checkpoint is `c75b4b51cad4efb99e4f9fcee3d31d4aa25e533a`.
 
-| Synchronization control | Verified outcome |
-|---|---|
-| Repository visibility | Public, changed only after the owner's explicit confirmation on 18 August 2026. |
-| Branch synchronized | `main` → `github/main` |
-| Source history treatment | Existing workspace history preserved; no rebase or force-push used. |
-| Managed deployment remote | Preserved as `origin`; GitHub was added separately as `github`. |
-| Credentials and raw media | Not committed as part of this source sync. |
+| Synchronization control   | Verified outcome                                                                |
+| ------------------------- | ------------------------------------------------------------------------------- |
+| Repository visibility     | Public, changed only after the owner's explicit confirmation on 18 August 2026. |
+| Branch synchronized       | `main` → `github/main`                                                          |
+| Source history treatment  | Existing workspace history preserved; no rebase or force-push used.             |
+| Managed deployment remote | Preserved as `origin`; GitHub was added separately as `github`.                 |
+| Credentials and raw media | Not committed as part of this source sync.                                      |
 
 Future reviewed code changes can be pushed to the dedicated `github` remote. A rebase remains unnecessary unless a future branch is proven to share ancestry with this repository.
 

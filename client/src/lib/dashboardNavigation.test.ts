@@ -8,12 +8,21 @@ describe("dashboard section navigation", () => {
       getElementById: vi.fn(() => ({ scrollIntoView })),
     } as unknown as Document;
 
-    for (const section of ["daily-research", "draft-reels", "weekly-compilation", "publishing-status", "content-log"]) {
+    for (const section of [
+      "daily-research",
+      "draft-reels",
+      "weekly-compilation",
+      "publishing-status",
+      "content-log",
+    ]) {
       scrollToDashboardSection(section, root);
     }
 
     expect(root.getElementById).toHaveBeenCalledTimes(5);
     expect(scrollIntoView).toHaveBeenCalledTimes(5);
-    expect(scrollIntoView).toHaveBeenLastCalledWith({ behavior: "smooth", block: "start" });
+    expect(scrollIntoView).toHaveBeenLastCalledWith({
+      behavior: "smooth",
+      block: "start",
+    });
   });
 });

@@ -40,10 +40,19 @@ export const studyCandidates = mysqlTable("study_candidates", {
   ownerId: int("ownerId").notNull(),
   title: text("title").notNull(),
   topicKey: varchar("topicKey", { length: 512 }).notNull(),
-  contentCategory: mysqlEnum("contentCategory", ["neuroscience", "psychology", "diet", "mental_health"])
+  contentCategory: mysqlEnum("contentCategory", [
+    "neuroscience",
+    "psychology",
+    "diet",
+    "mental_health",
+  ])
     .default("neuroscience")
     .notNull(),
-  discoverySource: mysqlEnum("discoverySource", ["pubmed", "europe_pmc", "manual"])
+  discoverySource: mysqlEnum("discoverySource", [
+    "pubmed",
+    "europe_pmc",
+    "manual",
+  ])
     .default("manual")
     .notNull(),
   journal: varchar("journal", { length: 255 }).notNull(),
@@ -58,7 +67,11 @@ export const studyCandidates = mysqlTable("study_candidates", {
     "Preclinical model",
     "Unclassified",
   ]).notNull(),
-  screeningStatus: mysqlEnum("screeningStatus", ["passed", "needs_review", "rejected"])
+  screeningStatus: mysqlEnum("screeningStatus", [
+    "passed",
+    "needs_review",
+    "rejected",
+  ])
     .default("needs_review")
     .notNull(),
   screeningReason: text("screeningReason"),
@@ -66,7 +79,11 @@ export const studyCandidates = mysqlTable("study_candidates", {
   reviewRisk: mysqlEnum("reviewRisk", ["standard", "high_scrutiny"])
     .default("standard")
     .notNull(),
-  crossValidationStatus: mysqlEnum("crossValidationStatus", ["not_started", "confirmed", "needs_review"])
+  crossValidationStatus: mysqlEnum("crossValidationStatus", [
+    "not_started",
+    "confirmed",
+    "needs_review",
+  ])
     .default("not_started")
     .notNull(),
   requiresOwnerReview: boolean("requiresOwnerReview").default(false).notNull(),
@@ -84,13 +101,28 @@ export const reelDrafts = mysqlTable("reel_drafts", {
   ownerId: int("ownerId").notNull(),
   studyCandidateId: int("studyCandidateId").notNull(),
   topic: text("topic").notNull(),
-  status: mysqlEnum("status", ["research", "scripted", "assets_ready", "blocked", "approved"])
+  status: mysqlEnum("status", [
+    "research",
+    "scripted",
+    "assets_ready",
+    "blocked",
+    "approved",
+  ])
     .default("research")
     .notNull(),
   narrationSpans: json("narrationSpans").$type<string[]>().notNull(),
-  visualKeyframes: json("visualKeyframes").$type<{ label: string; status: string }[]>().notNull(),
-  bgmStatus: mysqlEnum("bgmStatus", ["missing", "ready", "blocked"]).default("missing").notNull(),
-  voiceStatus: mysqlEnum("voiceStatus", ["missing", "reference_ready", "ready", "blocked"])
+  visualKeyframes: json("visualKeyframes")
+    .$type<{ label: string; status: string }[]>()
+    .notNull(),
+  bgmStatus: mysqlEnum("bgmStatus", ["missing", "ready", "blocked"])
+    .default("missing")
+    .notNull(),
+  voiceStatus: mysqlEnum("voiceStatus", [
+    "missing",
+    "reference_ready",
+    "ready",
+    "blocked",
+  ])
     .default("missing")
     .notNull(),
   voiceReferenceAssessment: json("voiceReferenceAssessment").$type<{
@@ -105,7 +137,9 @@ export const reelDrafts = mysqlTable("reel_drafts", {
     assessedAt: string;
   }>(),
   sourceCited: boolean("sourceCited").default(false).notNull(),
-  limitationLinePresent: boolean("limitationLinePresent").default(false).notNull(),
+  limitationLinePresent: boolean("limitationLinePresent")
+    .default(false)
+    .notNull(),
   notMedicalAdvice: boolean("notMedicalAdvice").default(false).notNull(),
   sourcePack: json("sourcePack").$type<{
     primarySourceUrl: string;
@@ -115,10 +149,16 @@ export const reelDrafts = mysqlTable("reel_drafts", {
     hinglishSafetyGuidance: string;
     healthRedFlags: string[];
   }>(),
-  sourcePackStatus: mysqlEnum("sourcePackStatus", ["missing", "needs_review", "complete"])
+  sourcePackStatus: mysqlEnum("sourcePackStatus", [
+    "missing",
+    "needs_review",
+    "complete",
+  ])
     .default("missing")
     .notNull(),
-  healthRedFlagsCleared: boolean("healthRedFlagsCleared").default(false).notNull(),
+  healthRedFlagsCleared: boolean("healthRedFlagsCleared")
+    .default(false)
+    .notNull(),
   approvedForPublish: boolean("approvedForPublish").default(false).notNull(),
   approvedByOwnerId: int("approvedByOwnerId"),
   approvedAt: timestamp("approvedAt"),
@@ -144,7 +184,12 @@ export const weeklyBundles = mysqlTable("weekly_bundles", {
   ownerId: int("ownerId").notNull(),
   title: varchar("title", { length: 255 }).notNull(),
   weekStart: timestamp("weekStart").notNull(),
-  status: mysqlEnum("status", ["collecting", "ready_to_compile", "compiled", "blocked"])
+  status: mysqlEnum("status", [
+    "collecting",
+    "ready_to_compile",
+    "compiled",
+    "blocked",
+  ])
     .default("collecting")
     .notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -168,14 +213,25 @@ export const contentLog = mysqlTable(
     topicKey: varchar("topicKey", { length: 512 }).notNull(),
     usedAt: timestamp("usedAt").defaultNow().notNull(),
   },
-  table => [uniqueIndex("content_log_owner_topic_key").on(table.ownerId, table.topicKey)],
+  table => [
+    uniqueIndex("content_log_owner_topic_key").on(
+      table.ownerId,
+      table.topicKey
+    ),
+  ]
 );
 
 export const blockerNotices = mysqlTable("blocker_notices", {
   id: int("id").autoincrement().primaryKey(),
   ownerId: int("ownerId").notNull(),
-  blockerType: mysqlEnum("blockerType", ["voice_sample", "video_quota", "facebook_page"]).notNull(),
-  severity: mysqlEnum("severity", ["critical", "warning", "info"]).default("warning").notNull(),
+  blockerType: mysqlEnum("blockerType", [
+    "voice_sample",
+    "video_quota",
+    "facebook_page",
+  ]).notNull(),
+  severity: mysqlEnum("severity", ["critical", "warning", "info"])
+    .default("warning")
+    .notNull(),
   title: varchar("title", { length: 255 }).notNull(),
   detail: text("detail").notNull(),
   resolved: boolean("resolved").default(false).notNull(),
@@ -188,31 +244,49 @@ export const automationJobs = mysqlTable(
   {
     id: int("id").autoincrement().primaryKey(),
     ownerId: int("ownerId").notNull(),
-    jobType: mysqlEnum("jobType", ["daily_research", "weekly_compilation"]).notNull(),
+    jobType: mysqlEnum("jobType", [
+      "daily_research",
+      "weekly_compilation",
+    ]).notNull(),
     cronExpression: varchar("cronExpression", { length: 64 }).notNull(),
     scheduleCronTaskUid: varchar("scheduleCronTaskUid", { length: 65 }),
     enabled: boolean("enabled").default(true).notNull(),
     lastExecutedAt: timestamp("lastExecutedAt"),
-    lastStatus: mysqlEnum("lastStatus", ["idle", "running", "succeeded", "failed", "blocked"])
+    lastStatus: mysqlEnum("lastStatus", [
+      "idle",
+      "running",
+      "succeeded",
+      "failed",
+      "blocked",
+    ])
       .default("idle")
       .notNull(),
     lastSummary: text("lastSummary"),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
     updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   },
-  table => [uniqueIndex("automation_jobs_owner_type").on(table.ownerId, table.jobType)],
+  table => [
+    uniqueIndex("automation_jobs_owner_type").on(table.ownerId, table.jobType),
+  ]
 );
 
 export const automationRuns = mysqlTable("automation_runs", {
   id: int("id").autoincrement().primaryKey(),
   jobId: int("jobId").notNull(),
   triggerType: mysqlEnum("triggerType", ["scheduled", "manual"]).notNull(),
-  status: mysqlEnum("status", ["running", "succeeded", "failed", "blocked"]).notNull(),
+  status: mysqlEnum("status", [
+    "running",
+    "succeeded",
+    "failed",
+    "blocked",
+  ]).notNull(),
   startedAt: timestamp("startedAt").defaultNow().notNull(),
   completedAt: timestamp("completedAt"),
   resultSummary: text("resultSummary"),
   candidateCount: int("candidateCount").default(0).notNull(),
-  sourceSystem: varchar("sourceSystem", { length: 64 }).default("neuropulse_heartbeat").notNull(),
+  sourceSystem: varchar("sourceSystem", { length: 64 })
+    .default("neuropulse_heartbeat")
+    .notNull(),
   nextOwnerAction: text("nextOwnerAction"),
 });
 
@@ -223,17 +297,31 @@ export const serviceIntegrations = mysqlTable(
     ownerId: int("ownerId").notNull(),
     serviceKey: varchar("serviceKey", { length: 64 }).notNull(),
     displayName: varchar("displayName", { length: 128 }).notNull(),
-    status: mysqlEnum("status", ["available", "private_only", "needs_owner_login", "needs_official_credential", "blocked"])
+    status: mysqlEnum("status", [
+      "available",
+      "private_only",
+      "needs_owner_login",
+      "needs_official_credential",
+      "blocked",
+    ]).notNull(),
+    privateAutomationAllowed: boolean("privateAutomationAllowed")
+      .default(false)
       .notNull(),
-    privateAutomationAllowed: boolean("privateAutomationAllowed").default(false).notNull(),
-    publicSubmissionAllowed: boolean("publicSubmissionAllowed").default(false).notNull(),
+    publicSubmissionAllowed: boolean("publicSubmissionAllowed")
+      .default(false)
+      .notNull(),
     detail: text("detail").notNull(),
     nextOwnerAction: text("nextOwnerAction"),
     lastCheckedAt: timestamp("lastCheckedAt").defaultNow().notNull(),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
     updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   },
-  table => [uniqueIndex("service_integrations_owner_key").on(table.ownerId, table.serviceKey)],
+  table => [
+    uniqueIndex("service_integrations_owner_key").on(
+      table.ownerId,
+      table.serviceKey
+    ),
+  ]
 );
 
 export type StudyCandidate = typeof studyCandidates.$inferSelect;

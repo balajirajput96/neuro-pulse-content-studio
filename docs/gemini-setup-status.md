@@ -6,13 +6,13 @@
 
 ## Configured and verified
 
-| Item | Status | Evidence |
-|---|---|---|
-| Direct Gemini sign-in | Active | The Gemini web session identified the signed-in account as Balaji Rajput (`balajirajput968@gmail.com`). |
-| Daily private research brief | Enabled | Gemini Scheduled Actions contains **NeuroPulse Daily Neuroscience Brief**, set to run every day by **09:00**. The action toggle was verified as enabled. |
-| Editorial brief requirements | Configured | The scheduled brief requests up to five recent peer-reviewed or primary-source neuroscience findings, citations, limitations, duplicate-topic flags, and a Hinglish 60-second reel angle. |
-| External publishing boundary | Preserved | The Gemini instruction explicitly prohibits uploads, posts, or action on YouTube, Instagram, Facebook, or any other external account. |
-| Standalone Gemini connector | Not enabled | The Manus connector remains disabled because the requested work was completed in the direct Gemini web session; no API key was requested, extracted, stored, or hardcoded. |
+| Item                         | Status      | Evidence                                                                                                                                                                                  |
+| ---------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Direct Gemini sign-in        | Active      | The Gemini web session identified the signed-in account as Balaji Rajput (`balajirajput968@gmail.com`).                                                                                   |
+| Daily private research brief | Enabled     | Gemini Scheduled Actions contains **NeuroPulse Daily Neuroscience Brief**, set to run every day by **09:00**. The action toggle was verified as enabled.                                  |
+| Editorial brief requirements | Configured  | The scheduled brief requests up to five recent peer-reviewed or primary-source neuroscience findings, citations, limitations, duplicate-topic flags, and a Hinglish 60-second reel angle. |
+| External publishing boundary | Preserved   | The Gemini instruction explicitly prohibits uploads, posts, or action on YouTube, Instagram, Facebook, or any other external account.                                                     |
+| Standalone Gemini connector  | Not enabled | The Manus connector remains disabled because the requested work was completed in the direct Gemini web session; no API key was requested, extracted, stored, or hardcoded.                |
 
 ## Operating boundary
 

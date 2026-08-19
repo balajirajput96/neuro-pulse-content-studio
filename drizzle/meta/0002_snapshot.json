@@ -93,10 +93,7 @@
       "indexes": {
         "automation_jobs_owner_type": {
           "name": "automation_jobs_owner_type",
-          "columns": [
-            "ownerId",
-            "jobType"
-          ],
+          "columns": ["ownerId", "jobType"],
           "isUnique": true
         }
       },
@@ -104,9 +101,7 @@
       "compositePrimaryKeys": {
         "automation_jobs_id": {
           "name": "automation_jobs_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},
@@ -179,9 +174,7 @@
       "compositePrimaryKeys": {
         "automation_runs_id": {
           "name": "automation_runs_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},
@@ -264,9 +257,7 @@
       "compositePrimaryKeys": {
         "blocker_notices_id": {
           "name": "blocker_notices_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},
@@ -352,9 +343,7 @@
       "compositePrimaryKeys": {
         "citation_records_id": {
           "name": "citation_records_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},
@@ -410,10 +399,7 @@
       "indexes": {
         "content_log_owner_topic_key": {
           "name": "content_log_owner_topic_key",
-          "columns": [
-            "ownerId",
-            "topicKey"
-          ],
+          "columns": ["ownerId", "topicKey"],
           "isUnique": true
         }
       },
@@ -421,9 +407,7 @@
       "compositePrimaryKeys": {
         "content_log_id": {
           "name": "content_log_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},
@@ -567,9 +551,7 @@
       "compositePrimaryKeys": {
         "reel_drafts_id": {
           "name": "reel_drafts_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},
@@ -701,9 +683,7 @@
       "compositePrimaryKeys": {
         "study_candidates_id": {
           "name": "study_candidates_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},
@@ -786,17 +766,13 @@
       "compositePrimaryKeys": {
         "users_id": {
           "name": "users_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {
         "users_openId_unique": {
           "name": "users_openId_unique",
-          "columns": [
-            "openId"
-          ]
+          "columns": ["openId"]
         }
       },
       "checkConstraint": {}
@@ -838,9 +814,7 @@
       "compositePrimaryKeys": {
         "weekly_bundle_reels_id": {
           "name": "weekly_bundle_reels_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},
@@ -908,9 +882,7 @@
       "compositePrimaryKeys": {
         "weekly_bundles_id": {
           "name": "weekly_bundles_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},

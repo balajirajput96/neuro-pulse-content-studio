@@ -6,10 +6,29 @@ export const STUDY_TYPES = [
   "Preclinical model",
 ] as const;
 
-export const SCREENING_STATUSES = ["passed", "needs_review", "rejected"] as const;
-export const DRAFT_STATUSES = ["research", "scripted", "assets_ready", "blocked", "approved"] as const;
-export const BLOCKER_TYPES = ["voice_sample", "video_quota", "facebook_page"] as const;
-export const CONTENT_CATEGORIES = ["neuroscience", "psychology", "diet", "mental_health"] as const;
+export const SCREENING_STATUSES = [
+  "passed",
+  "needs_review",
+  "rejected",
+] as const;
+export const DRAFT_STATUSES = [
+  "research",
+  "scripted",
+  "assets_ready",
+  "blocked",
+  "approved",
+] as const;
+export const BLOCKER_TYPES = [
+  "voice_sample",
+  "video_quota",
+  "facebook_page",
+] as const;
+export const CONTENT_CATEGORIES = [
+  "neuroscience",
+  "psychology",
+  "diet",
+  "mental_health",
+] as const;
 export const HIGH_SCRUTINY_CATEGORIES = ["diet", "mental_health"] as const;
 export const HEALTH_CONTENT_RED_FLAGS = [
   "diagnosis_or_treatment_claim",
@@ -37,7 +56,8 @@ export type DraftStatus = (typeof DRAFT_STATUSES)[number];
 export type BlockerType = (typeof BLOCKER_TYPES)[number];
 export type ContentCategory = (typeof CONTENT_CATEGORIES)[number];
 export type HealthContentRedFlag = (typeof HEALTH_CONTENT_RED_FLAGS)[number];
-export type HinglishScriptQualityCheck = (typeof HINGLISH_SCRIPT_QUALITY_CHECKS)[number];
+export type HinglishScriptQualityCheck =
+  (typeof HINGLISH_SCRIPT_QUALITY_CHECKS)[number];
 
 export type HinglishScriptTemplate = {
   title: string;
@@ -72,7 +92,7 @@ export function isDraftReady(
   bgmStatus: string,
   voiceStatus: string,
   sourcePackStatus = "complete",
-  healthRedFlagsCleared = true,
+  healthRedFlagsCleared = true
 ) {
   return (
     checklist.sourceCited &&
@@ -95,7 +115,7 @@ export function isReelDraftReady(draft: ReelReadinessState) {
     draft.bgmStatus,
     draft.voiceStatus,
     draft.sourcePackStatus,
-    draft.healthRedFlagsCleared,
+    draft.healthRedFlagsCleared
   );
 }
 
@@ -112,9 +132,15 @@ export function approvalBlocker(
   bgmStatus: string,
   voiceStatus: string,
   sourcePackStatus = "complete",
-  healthRedFlagsCleared = true,
+  healthRedFlagsCleared = true
 ) {
-  return isDraftReady(checklist, bgmStatus, voiceStatus, sourcePackStatus, healthRedFlagsCleared)
+  return isDraftReady(
+    checklist,
+    bgmStatus,
+    voiceStatus,
+    sourcePackStatus,
+    healthRedFlagsCleared
+  )
     ? null
     : "This draft cannot be approved until source-pack, health-safety, and production readiness requirements are complete";
 }
@@ -123,25 +149,55 @@ export function isHighScrutinyCategory(category: ContentCategory) {
   return (HIGH_SCRUTINY_CATEGORIES as readonly string[]).includes(category);
 }
 
-export function buildEditorialFlags(category: ContentCategory, sourceUrl?: string, populationContext?: string) {
+export function buildEditorialFlags(
+  category: ContentCategory,
+  sourceUrl?: string,
+  populationContext?: string
+) {
   const flags: HealthContentRedFlag[] = [];
   if (!sourceUrl) flags.push("missing_source_citation");
-  if (isHighScrutinyCategory(category) && !populationContext) flags.push("missing_limitation");
+  if (isHighScrutinyCategory(category) && !populationContext)
+    flags.push("missing_limitation");
   return flags;
 }
 
-export function buildHinglishScriptTemplate(topic: string, category: ContentCategory): HinglishScriptTemplate {
+export function buildHinglishScriptTemplate(
+  topic: string,
+  category: ContentCategory
+): HinglishScriptTemplate {
   const highScrutiny = isHighScrutinyCategory(category);
   return {
     title: `60-second Hinglish evidence draft · ${topic}`,
     sections: [
-      { label: "0–5s · Hook", prompt: "Surprising observation bolo, lekin certainty ya personal promise mat karo." },
-      { label: "5–18s · Study context", prompt: "Journal, study type, aur jis population/context par finding based hai woh clear karo." },
-      { label: "18–38s · Finding", prompt: "‘Study ne observe kiya’ language use karke plain Hinglish mein finding explain karo." },
-      { label: "38–50s · Why it matters", prompt: "Everyday relevance explain karo, bina diagnosis, treatment, dosage, ya guaranteed outcome claim kiye." },
-      { label: "50–60s · Caveat + source", prompt: highScrutiny ? "Limitation, medical-safety line, aur primary source card compulsory rakho." : "Limitation line aur primary source card compulsory rakho." },
+      {
+        label: "0–5s · Hook",
+        prompt:
+          "Surprising observation bolo, lekin certainty ya personal promise mat karo.",
+      },
+      {
+        label: "5–18s · Study context",
+        prompt:
+          "Journal, study type, aur jis population/context par finding based hai woh clear karo.",
+      },
+      {
+        label: "18–38s · Finding",
+        prompt:
+          "‘Study ne observe kiya’ language use karke plain Hinglish mein finding explain karo.",
+      },
+      {
+        label: "38–50s · Why it matters",
+        prompt:
+          "Everyday relevance explain karo, bina diagnosis, treatment, dosage, ya guaranteed outcome claim kiye.",
+      },
+      {
+        label: "50–60s · Caveat + source",
+        prompt: highScrutiny
+          ? "Limitation, medical-safety line, aur primary source card compulsory rakho."
+          : "Limitation line aur primary source card compulsory rakho.",
+      },
     ],
     requiredChecks: [...HINGLISH_SCRIPT_QUALITY_CHECKS],
-    safeClosingLine: "Yeh general research context hai, personal medical advice nahi. Full source aur limitations description mein review karo.",
+    safeClosingLine:
+      "Yeh general research context hai, personal medical advice nahi. Full source aur limitations description mein review karo.",
   };
 }

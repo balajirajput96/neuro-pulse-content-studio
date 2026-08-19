@@ -6,7 +6,8 @@ export async function handleScheduledAutomation(req: Request, res: Response) {
   let taskUid: string | undefined;
   try {
     const user = await sdk.authenticateRequest(req);
-    if (!user.isCron || !user.taskUid) return res.status(403).json({ error: "cron-only" });
+    if (!user.isCron || !user.taskUid)
+      return res.status(403).json({ error: "cron-only" });
     taskUid = user.taskUid;
     const result = await runAutomationJobByTaskUid(taskUid);
     return res.json({ ok: true, result, timestamp: new Date().toISOString() });

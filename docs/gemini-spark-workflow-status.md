@@ -6,11 +6,11 @@
 
 ## Active Gemini Spark schedules
 
-| Workstream | Gemini Spark cadence | Private output |
-|---|---|---|
-| Daily neuroscience research intake | Daily around 09:00 | Evidence-led study candidates with source, DOI/PMID, study type, limitations, and duplicate-topic flags. |
-| Daily Hinglish reel-draft preparation | Daily around 10:00 | A 60-second general-audience script with factual hook, visual beats, citation, and not-medical-advice line. |
-| Weekly compilation-readiness review | Sunday around 09:00 | Seven-reel readiness audit for citations, disclaimer, clean-voice readiness, and visual-beat completion. |
+| Workstream                            | Gemini Spark cadence | Private output                                                                                              |
+| ------------------------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Daily neuroscience research intake    | Daily around 09:00   | Evidence-led study candidates with source, DOI/PMID, study type, limitations, and duplicate-topic flags.    |
+| Daily Hinglish reel-draft preparation | Daily around 10:00   | A 60-second general-audience script with factual hook, visual beats, citation, and not-medical-advice line. |
+| Weekly compilation-readiness review   | Sunday around 09:00  | Seven-reel readiness audit for citations, disclaimer, clean-voice readiness, and visual-beat completion.    |
 
 ## Publishing boundary
 

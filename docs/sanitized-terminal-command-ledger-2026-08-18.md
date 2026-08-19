@@ -17,15 +17,15 @@ cd /home/ubuntu/neuroscience-content-workspace && curl -fsS -o /dev/null -w 'GET
 cd /home/ubuntu/neuroscience-content-workspace && git diff --check
 ```
 
-| Command | Latest observed result |
-|---|---|
-| `pnpm check` | Passed with no TypeScript errors. |
-| `pnpm test` | Passed: 6 files and 22 tests. |
-| `pnpm build` | Passed Vite client and esbuild server build. |
-| `pnpm audit --prod --json` | Zero low, moderate, high, and critical production findings. |
-| `pnpm audit --json` | Zero low, moderate, high, and critical findings across the resolved graph. |
-| HTTP health check | `GET /` returned HTTP 200. |
-| `git diff --check` | Passed with no whitespace errors. |
+| Command                    | Latest observed result                                                     |
+| -------------------------- | -------------------------------------------------------------------------- |
+| `pnpm check`               | Passed with no TypeScript errors.                                          |
+| `pnpm test`                | Passed: 6 files and 22 tests.                                              |
+| `pnpm build`               | Passed Vite client and esbuild server build.                               |
+| `pnpm audit --prod --json` | Zero low, moderate, high, and critical production findings.                |
+| `pnpm audit --json`        | Zero low, moderate, high, and critical findings across the resolved graph. |
+| HTTP health check          | `GET /` returned HTTP 200.                                                 |
+| `git diff --check`         | Passed with no whitespace errors.                                          |
 
 ## Dependency Remediation Commands
 
