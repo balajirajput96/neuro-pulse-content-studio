@@ -1,0 +1,57 @@
+name: Daily Repository Health
+
+on:
+  schedule:
+    # 02:15 UTC every day; intentionally separate from NeuroPulse's 03:30 UTC research intake.
+    - cron: "15 2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: daily-repository-health-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    name: Non-destructive repository health check
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.34.4
+          run_install: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Audit dependencies
+        run: pnpm audit --json
+
+      - name: Check formatting
+        run: pnpm exec prettier --check .
+
+      - name: Check TypeScript
+        run: pnpm check
+
+      - name: Run tests
+        run: pnpm test -- --maxWorkers=1 --minWorkers=1
+
+      - name: Build production bundle
+        run: pnpm build
+
+      - name: Verify checked-out source is unchanged
+        run: git diff --check && test -z "$(git status --porcelain)"
